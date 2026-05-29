@@ -1,6 +1,28 @@
-:root {
-  --ink: #0d0c0a;
-  --deep: #171510;
-  --panel: #1f1c18;
-  --border: #302c25;
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Jost", sans-serif;
+  background: #0d0c0a;
+  color: white;
+  text-align: center;
+  padding-top: 100px;
+}
+
+h1 {
+  font-size: 50px;
+  font-weight: 700;
+}
+
+p {
+  font-size: 18px;
+  color: #cbd5e1;
+  margin-top: 10px;
 }

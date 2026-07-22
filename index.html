@@ -333,7 +333,54 @@
   .steam path:nth-child(3){ animation-delay:1.8s; }
   .ring-pulse{ animation:ringPulse 5s ease-in-out infinite; }
 
+  /* NAV LINKS */
+  .nav__links{ display:flex; gap:22px; font-size:13px; font-weight:600; color:var(--muted); }
+  .nav__links a{ transition:color .2s var(--ease); }
+  .nav__links a:hover{ color:var(--ink); }
+
+  /* ABOUT */
+  .about__grid{ display:grid; gap:clamp(32px,5vw,64px); grid-template-columns:0.9fr 1.1fr; align-items:center; max-width:1000px; margin:0 auto; }
+  .about__photo{ border-radius:var(--radius); overflow:hidden; border:1px solid var(--line); box-shadow:0 30px 60px rgba(0,0,0,.4); }
+  .about__photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .about__body p{ margin:0 0 18px; color:var(--muted); font-size:clamp(15px,1.6vw,18px); }
+  .about__body p:last-child{ margin-bottom:0; }
+  @media (max-width:800px){
+    .about__grid{ grid-template-columns:1fr; text-align:center; }
+  }
+
+  /* EXPERIENCE */
+  .exp-list{ display:flex; flex-direction:column; gap:24px; max-width:820px; margin:0 auto; }
+  .exp-item{ border:1px solid var(--line); border-radius:var(--radius); background:var(--card); padding:clamp(24px,3vw,34px) clamp(22px,3vw,30px); }
+  .exp-item__period{ display:inline-block; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--purple-2); font-weight:700; margin-bottom:10px; }
+  .exp-item h3{ margin:0 0 16px; font-size:clamp(17px,2vw,20px); font-weight:800; }
+  .exp-item__org{ color:var(--muted); font-weight:600; font-size:14px; }
+  .exp-item__points{ margin:0 0 22px; padding-left:20px; color:var(--muted); font-size:14px; line-height:1.7; }
+  .exp-item__points li{ margin-bottom:4px; }
+  .exp-item__stats{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
+  .exp-stat__label{ display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .exp-stat__label b{ color:var(--ink); }
+  .bar{ height:6px; border-radius:999px; background:var(--line); overflow:hidden; }
+  .bar > i{ display:block; height:100%; background:linear-gradient(90deg,var(--purple),var(--purple-2)); border-radius:999px; }
+
+  /* FREELANCER */
+  .freelance-list{ display:flex; flex-direction:column; gap:2px; background:var(--line); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; max-width:820px; margin:0 auto; }
+  .freelance-item{ display:flex; gap:24px; align-items:flex-start; background:var(--bg-2); padding:clamp(22px,3vw,28px); }
+  .freelance-item__num{ font-size:13px; font-weight:800; color:var(--purple-2); letter-spacing:.05em; flex-shrink:0; padding-top:2px; }
+  .freelance-item h3{ margin:0 0 6px; font-size:17px; font-weight:800; }
+  .freelance-item p{ margin:0; color:var(--muted); font-size:14px; }
+
+  /* CREDENTIALS */
+  .creds-grid{ display:grid; gap:clamp(24px,4vw,48px); grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); max-width:900px; margin:0 auto; }
+  .creds-col h3{ margin:0 0 20px; font-size:14px; letter-spacing:.1em; text-transform:uppercase; color:var(--purple-2); font-weight:800; }
+  .creds-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:18px; }
+  .creds-col li{ border-left:2px solid var(--line); padding-left:16px; }
+  .creds-col b{ display:block; font-size:15px; font-weight:700; margin-bottom:4px; }
+  .creds-col span{ color:var(--muted); font-size:13px; }
+
   /* RESPONSIVE */
+  @media (max-width:900px){
+    .nav__links{ display:none; }
+  }
   @media (max-width:640px){
     .nav__inner{ height:58px; }
     .brand{ font-size:14px; }
@@ -391,6 +438,14 @@
         </span>
         WILLSON RAI
       </a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#gallery">Creative</a>
+        <a href="#freelancer">Freelancer</a>
+        <a href="#creds">Credentials</a>
+      </nav>
       <a class="btn" href="#contact">Get in touch</a>
     </div>
   </header>
@@ -569,6 +624,25 @@
       <div class="hero__scroll"><span></span>Scroll</div>
     </section>
 
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="kicker">About Me</span>
+          <h2>The Art of Every Cup</h2>
+        </div>
+        <div class="about__grid">
+          <div class="about__photo reveal d1">
+            <img src="images/latte-pour.png" alt="Willson Rai pouring latte art" />
+          </div>
+          <div class="about__body reveal d2">
+            <p>I'm Willson Rai, a passionate Head Barista and freelancer from Lalitpur, Nepal. With over seven years in the coffee and hospitality industry, I've grown from pulling my first espresso shot to leading teams, training new baristas, and creating visual identities for cafés and restaurants.</p>
+            <p>Beyond the bar, I wear the hat of a creative freelancer — designing menus, crafting social media content, and building brand identities. Coffee and creativity flow through everything I do.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- THE CRAFT -->
     <section class="section section--alt" id="craft">
       <div class="wrap">
@@ -669,6 +743,71 @@
       </div>
     </section>
 
+    <!-- EXPERIENCE -->
+    <section class="section" id="experience">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="kicker">Journey & Mastery Levels</span>
+          <h2>Work Experience</h2>
+        </div>
+        <div class="exp-list">
+          <article class="exp-item reveal d1">
+            <div class="exp-item__head">
+              <span class="exp-item__period">Dec 2024 — Present</span>
+              <h3>Head Barista <span class="exp-item__org">· Feels Café, Jhamsikhel, Lalitpur</span></h3>
+            </div>
+            <ul class="exp-item__points">
+              <li>Maintained consistency in espresso quality and latte art across all shifts</li>
+              <li>Managed inventory, stock ordering, and supplier coordination</li>
+              <li>Trained new hires and interns on machines and grinders</li>
+              <li>Calibrated grinders and espresso machines for consistency</li>
+              <li>Built a positive, high-energy team culture under service pressure</li>
+              <li>Created in-house graphics for promotions, seasonal offers, and social media</li>
+              <li>Produced print-ready and digital assets for daily café operations</li>
+            </ul>
+            <div class="exp-item__stats">
+              <div class="exp-stat"><div class="exp-stat__label"><span>Extraction Consistency</span><b>98%</b></div><div class="bar"><i style="width:98%"></i></div></div>
+              <div class="exp-stat"><div class="exp-stat__label"><span>Workflow Mastery</span><b>96%</b></div><div class="bar"><i style="width:96%"></i></div></div>
+            </div>
+          </article>
+
+          <article class="exp-item reveal d2">
+            <div class="exp-item__head">
+              <span class="exp-item__period">2020 — 2024</span>
+              <h3>Barista <span class="exp-item__org">· Chaasuwa Restaurant, Satdobato, Lalitpur</span></h3>
+            </div>
+            <ul class="exp-item__points">
+              <li>Brewed coffees as per restaurant standards and menu specifications</li>
+              <li>Served guests with attentive, professional service</li>
+              <li>Set up bar stations and maintained sanitation across bar and dining areas</li>
+              <li>Regularly cleaned and maintained espresso machine performance</li>
+            </ul>
+            <div class="exp-item__stats">
+              <div class="exp-stat"><div class="exp-stat__label"><span>Beverage Craft & Standard</span><b>95%</b></div><div class="bar"><i style="width:95%"></i></div></div>
+              <div class="exp-stat"><div class="exp-stat__label"><span>Bar Sanitation & Pace</span><b>94%</b></div><div class="bar"><i style="width:94%"></i></div></div>
+            </div>
+          </article>
+
+          <article class="exp-item reveal d3">
+            <div class="exp-item__head">
+              <span class="exp-item__period">2018 — 2020</span>
+              <h3>Barista <span class="exp-item__org">· Jhamel Beats, Jhamsikhel, Lalitpur</span></h3>
+            </div>
+            <ul class="exp-item__points">
+              <li>Worked as a barista within a medium-sized team</li>
+              <li>Maintained a clean and well-organized bar environment</li>
+              <li>Brewed and served coffee to guests with professionalism</li>
+              <li>Expanded knowledge of different coffee types and techniques</li>
+            </ul>
+            <div class="exp-item__stats">
+              <div class="exp-stat"><div class="exp-stat__label"><span>Brewing Proficiency</span><b>90%</b></div><div class="bar"><i style="width:90%"></i></div></div>
+              <div class="exp-stat"><div class="exp-stat__label"><span>Guest Engagement</span><b>92%</b></div><div class="bar"><i style="width:92%"></i></div></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- SKILLS -->
     <section class="section" id="skills">
       <div class="wrap">
@@ -715,6 +854,98 @@
             <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" fill="#fff"/><path d="M8 7l1.5-3h5L16 7" stroke="#fff" stroke-width="1.6" fill="none"/><circle cx="12" cy="13" r="3.5" fill="#5b46f0"/></svg></div>
             <h3>Culinary Photography</h3>
             <p>Making every cup look as good as it tastes — styled, lit and shot in-house.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREATIVE EXPERIENCE -->
+    <section class="section section--alt" id="gallery">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="kicker">Beyond the Bar</span>
+          <h2>Creative Experience</h2>
+          <p>Alongside barista work, I bring a creative freelance skill set — visual, practical, and built for hospitality brands.</p>
+        </div>
+        <div class="features">
+          <div class="feature reveal d1">
+            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 4h14v3a4 4 0 01-4 4h-6a4 4 0 01-4-4V4z" fill="#fff"/><path d="M9 11v8a2 2 0 002 2h2a2 2 0 002-2v-8" stroke="#fff" stroke-width="1.6" fill="none"/></svg></div>
+            <h3>Print-Ready Menu Design</h3>
+            <p>Café and restaurant menus designed for both print and digital — balancing flavour, margin, and brand mood.</p>
+          </div>
+          <div class="feature reveal d2">
+            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" fill="#fff" opacity=".9"/><circle cx="12" cy="12" r="4" fill="#5b46f0"/></svg></div>
+            <h3>Graphic Design</h3>
+            <p>Promotional graphics, seasonal campaign visuals, and social media content built for hospitality branding.</p>
+          </div>
+          <div class="feature reveal d3">
+            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" fill="#fff"/><path d="M8 7l1.5-3h5L16 7" stroke="#fff" stroke-width="1.6" fill="none"/><circle cx="12" cy="13" r="3.5" fill="#5b46f0"/></svg></div>
+            <h3>Photography</h3>
+            <p>Culinary and beverage photography — styled, lit, and shot to make every dish and drink look as good as it tastes.</p>
+          </div>
+          <div class="feature reveal d1">
+            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6a2 2 0 012-2h9a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6z" fill="#fff"/><path d="M21 9l-5 3 5 3V9z" fill="#fff" opacity=".7"/></svg></div>
+            <h3>Videography</h3>
+            <p>Short-form video for social media — behind-the-bar clips, pour-overs, and brand storytelling content.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FREELANCER -->
+    <section class="section" id="freelancer">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="kicker">Available for Hire</span>
+          <h2>Freelance Services</h2>
+        </div>
+        <div class="freelance-list">
+          <div class="freelance-item reveal d1">
+            <span class="freelance-item__num">01</span>
+            <div><h3>Barista Consulting</h3><p>Menu development, barista training programs, equipment calibration, and workflow optimization for café startups and established venues.</p></div>
+          </div>
+          <div class="freelance-item reveal d2">
+            <span class="freelance-item__num">02</span>
+            <div><h3>Café & Menu Design</h3><p>Beautiful, print-ready menus and digital assets tailored to your brand's identity using Canva and layout design principles.</p></div>
+          </div>
+          <div class="freelance-item reveal d3">
+            <span class="freelance-item__num">03</span>
+            <div><h3>Social Media Content</h3><p>Eye-catching promotional graphics, seasonal campaigns, and consistent visual branding for restaurant and café social channels.</p></div>
+          </div>
+          <div class="freelance-item reveal d1">
+            <span class="freelance-item__num">04</span>
+            <div><h3>Barista Training Sessions</h3><p>One-on-one or group training for aspiring baristas — covering espresso theory, latte art, manual brewing, and customer interaction.</p></div>
+          </div>
+          <div class="freelance-item reveal d2">
+            <span class="freelance-item__num">05</span>
+            <div><h3>Guest Barista & Events</h3><p>Available for pop-up coffee experiences, hospitality events, brand activations, and cupping workshops.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREDENTIALS -->
+    <section class="section section--alt" id="creds">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <span class="kicker">Training & Credentials</span>
+          <h2>Education & Certifications</h2>
+        </div>
+        <div class="creds-grid">
+          <div class="creds-col reveal d1">
+            <h3>Training</h3>
+            <ul>
+              <li><b>Professional Barista Training</b><span>Mount Strada Barista Academy, Kathmandu · 4 months · Sept 2019 – Jan 2020</span></li>
+              <li><b>Cook Training Course</b><span>Hands-on culinary fundamentals and kitchen operations</span></li>
+            </ul>
+          </div>
+          <div class="creds-col reveal d2">
+            <h3>Certifications & Education</h3>
+            <ul>
+              <li><b>Barista Certification</b><span>Professional barista certification — espresso, milk, manual brewing</span></li>
+              <li><b>College (Grade 12)</b><span>Grand Academy, Kumaripati, Lalitpur · 2019</span></li>
+              <li><b>SEE (Grade 10)</b><span>Gyan Kunj English School, Satdobato, Lalitpur · 2017</span></li>
+            </ul>
           </div>
         </div>
       </div>

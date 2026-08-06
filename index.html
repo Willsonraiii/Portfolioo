@@ -327,9 +327,59 @@
   .footer__links{ display:flex; gap:22px; flex-wrap:wrap; }
   .footer__links a{ color:var(--muted); font-size:14px; transition:color .25s var(--ease); }
   .footer__links a:hover{ color:var(--ink); }
-  .footer__social{ display:flex; gap:14px; }
-  .footer__social a{ color:var(--muted); display:grid; place-items:center; width:34px; height:34px; border:1px solid var(--line); border-radius:50%; transition:color .25s var(--ease), border-color .25s var(--ease), transform .25s var(--ease); }
-  .footer__social a:hover{ color:var(--ink); border-color:rgba(123,107,255,.5); transform:translateY(-2px); }
+  /* Floating socials — visible on every section, not just footer */
+  @keyframes floatBob{
+    0%,100%{ transform:translateY(-50%) translateY(0); }
+    50%{ transform:translateY(-50%) translateY(-6px); }
+  }
+  @keyframes floatIn{
+    from{ opacity:0; transform:translateY(-50%) translateX(24px); }
+    to{ opacity:1; transform:translateY(-50%) translateX(0); }
+  }
+  @keyframes iconPop{
+    from{ opacity:0; transform:scale(.4) rotate(-20deg); }
+    to{ opacity:1; transform:scale(1) rotate(0); }
+  }
+  .float-social{
+    position:fixed; right:14px; top:50%; z-index:80;
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:7px; border-radius:999px;
+    background:linear-gradient(180deg, rgba(33,26,77,.55), rgba(20,16,42,.45));
+    border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:saturate(180%) blur(20px);
+    -webkit-backdrop-filter:saturate(180%) blur(20px);
+    box-shadow:0 8px 32px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.03) inset, 0 1px 0 rgba(255,255,255,.08) inset;
+    animation:floatIn .6s var(--ease) both, floatBob 5s ease-in-out .6s infinite;
+  }
+  .float-social a{
+    position:relative;
+    color:var(--muted); display:grid; place-items:center;
+    width:32px; height:32px; border-radius:50%;
+    background:rgba(255,255,255,.03);
+    transition:color .3s var(--ease), background .3s var(--ease), transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s var(--ease);
+    animation:iconPop .5s var(--ease) both;
+  }
+  .float-social a:nth-child(1){ animation-delay:.15s; }
+  .float-social a:nth-child(2){ animation-delay:.25s; }
+  .float-social a:nth-child(3){ animation-delay:.35s; }
+  .float-social a:hover{
+    color:var(--ink);
+    background:rgba(123,107,255,.28);
+    transform:scale(1.16) translateX(-3px);
+    box-shadow:0 0 0 1px rgba(123,107,255,.5), 0 6px 18px rgba(91,70,240,.45);
+  }
+  .float-social a:active{ transform:scale(.96) translateX(-1px); }
+  .float-social svg{ width:14px; height:14px; transition:transform .3s var(--ease); }
+  .float-social a:hover svg{ transform:scale(1.08); }
+  @media (max-width: 480px){
+    .float-social{ right:8px; padding:6px; gap:5px; }
+    .float-social a{ width:30px; height:30px; }
+    .float-social svg{ width:13px; height:13px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .float-social{ animation:none; }
+    .float-social a{ animation:none; }
+  }
   .footer small{ color:var(--muted-2); font-size:13px; }
 
   /* REVEAL */
@@ -452,6 +502,18 @@
 </style>
 </head>
 <body>
+  <div class="float-social" aria-label="Social links">
+    <a href="https://www.instagram.com/willson_obito/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://wa.me/9779765829096" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.011 0C5.394 0 0 5.394 0 12.017c0 2.093.548 4.08 1.594 5.855L0 24l6.317-1.656a11.97 11.97 0 005.694 1.45h.005c6.618 0 12.011-5.394 12.011-12.017C24.028 5.394 18.634 0 12.011 0zm0 21.833h-.004a9.83 9.83 0 01-5.017-1.379l-.36-.213-3.73.978.996-3.638-.235-.373a9.83 9.83 0 01-1.51-5.191c0-5.438 4.428-9.86 9.87-9.86 2.638 0 5.117 1.027 6.982 2.892a9.797 9.797 0 012.884 6.968c0 5.438-4.428 9.86-9.876 9.86z"/><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#14102a"/></svg>
+    </a>
+    <a href="https://github.com/Willsonraiii" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12.03c0 5.05 3.29 9.33 7.85 10.84.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.87-1.35-3.87-1.35-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.41-5.26 5.69.41.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .31.2.66.79.55A10.53 10.53 0 0 0 23.5 12.03C23.5 5.73 18.27.5 12 .5z"/></svg>
+    </a>
+  </div>
+
 
   <!-- NAV -->
   <header class="nav" id="nav">
@@ -1067,20 +1129,6 @@
         <a href="#contact">Contact</a>
         <a href="mailto:resume@willsonrai.com.np">Email</a>
       </nav>
-      <div class="footer__social" aria-label="Social links">
-        <a href="#" aria-label="LinkedIn" title="Add your LinkedIn URL">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" fill="currentColor" opacity=".15"/><path d="M7 10v7M7 7v.01M11 17v-4.5a2.5 2.5 0 015 0V17M11 10v7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </a>
-        <a href="https://www.instagram.com/willson_obito/" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg>
-        </a>
-        <a href="https://github.com/Willsonraiii" target="_blank" rel="noopener" aria-label="GitHub">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12.03c0 5.05 3.29 9.33 7.85 10.84.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.87-1.35-3.87-1.35-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.41-5.26 5.69.41.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .31.2.66.79.55A10.53 10.53 0 0 0 23.5 12.03C23.5 5.73 18.27.5 12 .5z"/></svg>
-        </a>
-        <a href="https://wa.me/9779765829096" target="_blank" rel="noopener" aria-label="WhatsApp">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.011 0C5.394 0 0 5.394 0 12.017c0 2.093.548 4.08 1.594 5.855L0 24l6.317-1.656a11.97 11.97 0 005.694 1.45h.005c6.618 0 12.011-5.394 12.011-12.017C24.028 5.394 18.634 0 12.011 0zm0 21.833h-.004a9.83 9.83 0 01-5.017-1.379l-.36-.213-3.73.978.996-3.638-.235-.373a9.83 9.83 0 01-1.51-5.191c0-5.438 4.428-9.86 9.87-9.86 2.638 0 5.117 1.027 6.982 2.892a9.797 9.797 0 012.884 6.968c0 5.438-4.428 9.86-9.876 9.86z"/><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-        </a>
-      </div>
       <small>© <span id="yr"></span> Willson Rai · Lalitpur, Nepal · Crafting since 2017.</small>
     </div>
   </footer>

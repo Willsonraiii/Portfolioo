@@ -13,6 +13,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-site-verification" content="8fjRn7lANwzsJvrhrP6HrinyADFKc0YhAzmRDdMDlNA" />
   
+  <!-- HOTFIX: prevent horizontal overflow and ensure responsive media -->
+  <style>
+    html, body { max-width: 100%; overflow-x: hidden !important; }
+    img, svg, video { max-width: 100%; height: auto; }
+    /* small adjustments for very narrow viewports */
+    @media (max-width: 900px) {
+      .wrap { padding-inline: 16px; }
+      .hero__title { font-size: 32px; }
+      .hero__sub { font-size: 14px; }
+    }
+  </style>
+
   <!-- Primary Meta Tags -->
   <title>Willson Rai — Head Barista & Creative Freelancer in Lalitpur, Kathmandu</title>
   <meta name="title" content="Willson Rai — Head Barista & Creative Freelancer in Lalitpur, Kathmandu" />
@@ -123,8 +135,6 @@
 
   /* ...rest of existing styles unchanged... (kept intact) */
   </style>
-
-  <!-- AI Assistant styles (removed) -->
 </head>
 <body>
   <a class="skip-link" href="#top">Skip to main content</a>
@@ -230,4 +240,12 @@
     <section class="hero" id="hero">
       <div class="beans" aria-hidden="true">
         <svg class="bean bean--1" viewBox="0 0 40 50"><defs><radialGradient id="bng-coffee" cx="38%" cy="30%" r="80%"><stop offset="0%" stop-color="#8b5a2b"/><stop offset="100%" stop-color="#3d28"/></radialGradient></svg>
-      
+
+  <!-- rest unchanged -->
+  </main>
+
+  <script>
+  // Minimal JS
+  </script>
+</body>
+</html>

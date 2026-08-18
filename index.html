@@ -355,61 +355,106 @@
     color:var(--purple-2); font-weight:700; margin-bottom:14px;
   }
 
-  /* CARDS */
+  /* CARDS — brew trio fan deck.
+     Format & animations follow the official gm-03 visionOS depth stack:
+     full-width glass sheets offset right/up, the front sheet holds all the
+     content and is always the same full size, back sheets are shorter
+     empties with a bottom-right tag. Hovering fans the stack wider —
+     translate + rotate only, .4s cubic-bezier(.2,.7,.3,1). The one
+     difference from the static demo: click/tap brings any card to the
+     front, the rest stack behind it. */
   .cards{
     position:relative; display:grid; place-items:center;
-    min-height:clamp(400px,50vw,500px); margin-top:8px;
+    min-height:clamp(460px,52vw,580px); margin-top:8px;
+  }
+  .cards__blob{
+    position:absolute; z-index:0; display:block; border-radius:50%;
+    pointer-events:none; filter:blur(52px); will-change:transform;
+  }
+  .cards__blob--1{ width:52%; aspect-ratio:1; background:rgba(91,70,240,.30); top:6%; left:-6%; animation:brewDrift 16s ease-in-out infinite alternate; }
+  .cards__blob--2{ width:42%; aspect-ratio:1; background:rgba(0,242,255,.13); bottom:-8%; right:-5%; animation:brewDrift 22s ease-in-out infinite alternate-reverse; }
+  .cards__blob--3{ width:30%; aspect-ratio:1; background:rgba(255,153,0,.12); top:38%; left:54%; animation:brewDrift 26s ease-in-out infinite alternate; }
+  @keyframes brewDrift{ from{ transform:translate3d(0,0,0) scale(1); } to{ transform:translate3d(7%,-9%,0) scale(1.15); } }
+
+  /* fixed-size fan: the anchor box every card is drawn from.
+     All cards are full width; the FRONT card is exactly this height. */
+  .cards__fan{
+    position:relative;
+    width:min(300px,80vw);
+    height:23rem;
   }
   .cards .card{
     --i:0;
-    --step-x:clamp(1.6rem,7vw,2.8rem);
-    --step-y:.4rem;
-    --step-rot:2deg;
-    position:absolute; top:50%; left:50%; width:min(300px,80vw);
-    isolation:isolate; text-align:center; cursor:pointer;
+    --step-x:2.75rem;             /* per-depth offset right (gm-03 direction; wider than the
+                                     demo so back tags stay visible on the peeking sheets) */
+    --step-y:-2.15rem;            /* per-depth offset up (same 1.28 x:y ratio as gm-03) */
+    --spread:1;                   /* ×1.26 on hover — the gm-03 fan animation */
+    --rot:0deg;                   /* -1.2deg on hover */
+    --b:calc(12px + var(--i) * 4px);     /* gm-03 blur chain: 12 / 16 / 20 */
+    --al:calc(.20 - var(--i) * .04);     /* gm-03 α chain: .20 / .16 / .12 */
+    position:absolute; top:0; left:0; width:100%; height:100%;
+    text-align:center; cursor:pointer;
     border-radius:var(--radius); padding:34px 26px 28px;
-    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
-    backdrop-filter:blur(14px) saturate(150%); -webkit-backdrop-filter:blur(14px) saturate(150%);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.3), inset 0 -1px 0 rgba(255,255,255,.06), 0 30px 60px -26px rgba(0,0,0,.6);
-    transform-origin:bottom center;
-    rotate:calc(var(--i) * var(--step-rot));
-    translate:calc(-50% + var(--i) * var(--step-x)) calc(-50% + var(--i) * var(--step-y));
-    filter:blur(calc(var(--i) * 2px));
-    opacity:calc(1 - var(--i) * .16);
+    background:rgba(255,255,255,var(--al));
+    border:1px solid rgba(255,255,255,.14);
+    -webkit-backdrop-filter:blur(var(--b)) saturate(150%);
+    backdrop-filter:blur(var(--b)) saturate(150%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(255,255,255,.06), 0 30px 70px -30px rgba(0,0,0,.7);
+    translate:calc(var(--i) * var(--step-x) * var(--spread)) calc(var(--i) * var(--step-y) * var(--spread));
+    rotate:var(--rot);
     z-index:calc(10 - var(--i));
-    transition:rotate .55s var(--premium), translate .55s var(--premium), filter .55s var(--premium), opacity .55s var(--premium), box-shadow .55s var(--premium);
+    will-change:transform;
+    /* the exact gm-03 transition (translate + rotate only, compositor-only) */
+    transition:translate .4s cubic-bezier(.2,.7,.3,1), rotate .4s cubic-bezier(.2,.7,.3,1), height .4s cubic-bezier(.2,.7,.3,1);
   }
-  .cards .card:hover{
-    filter:blur(calc(var(--i) * 1px));
-    opacity:calc(1 - var(--i) * .06);
+  /* front sheet: holds all the content — same full size for every card */
+  .cards .card[aria-current="true"]{
+    display:flex; flex-direction:column; align-items:center; gap:12px;
   }
+  /* back sheets: shorter stacked empties — gm-03 format, tag bottom-right */
+  .cards .card[aria-current="false"]{
+    height:calc(19rem - (var(--i) - 1) * 1.5rem); /* 19rem / 17.5rem — same ratios as gm-03 */
+  }
+  .cards .card[aria-current="false"] .card__art,
+  .cards .card[aria-current="false"] h3,
+  .cards .card[aria-current="false"] p{ display:none; }
   .cards .card:focus-visible{ outline:2px solid var(--purple-2); outline-offset:3px; }
-  .card__art{ position:relative; height:170px; display:grid; place-items:center; margin-bottom:16px; }
+  /* gm-03 hover animation: the fan spreads wider and tilts — translate & rotate only */
+  @media (hover:hover){
+    .cards:hover .card{ --spread:1.26; --rot:-1.2deg; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .cards:hover .card{ --spread:1; --rot:0deg; }
+  }
+  .card__art{ position:relative; height:170px; display:grid; place-items:center; }
   .card__art svg{ height:150px; width:auto; filter:drop-shadow(0 18px 26px rgba(0,0,0,.4)); }
-  .card h3{ margin:0 0 6px; font-size:19px; font-weight:800; letter-spacing:-.01em; }
+  .card h3{ margin:0; font-size:19px; font-weight:800; letter-spacing:-.01em; }
   .card p{ margin:0; color:var(--muted); font-size:13.5px; }
   .card__tag{
     position:absolute; top:14px; left:14px; z-index:2;
     font-size:10px; letter-spacing:.16em; text-transform:uppercase; font-weight:700;
-    color:var(--purple-2); background:rgba(255,255,255,.10);
+    color:var(--purple-2); background:rgba(23,18,50,.78);
     border:1px solid rgba(255,255,255,.14);
-    backdrop-filter:blur(8px) saturate(160%); -webkit-backdrop-filter:blur(8px) saturate(160%);
     border-radius:999px; padding:5px 10px;
+  }
+  /* back tags: bottom-right of the stacked sheet, dimmed — gm-03 format */
+  .cards .card[aria-current="false"] .card__tag{
+    top:auto; bottom:14px; right:14px; left:auto; opacity:.65;
   }
   @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
     .cards .card{ background:rgba(27,21,64,.94); }
   }
-  @media (max-width:480px){
-    .cards{ min-height:clamp(360px,80vw,420px); }
-    .cards .card{
-      --step-x:clamp(1.1rem,6.5vw,1.9rem); --step-rot:1deg;
-      width:min(260px,72vw); padding:26px 18px 22px;
-    }
-    .card__art{ height:120px; }
-    .card__art svg{ height:100px; }
+  /* touch: hover fan has no trigger, keep the deck at rest */
+  @media (hover:none){
+    .cards:hover .card{ --spread:1; --rot:0deg; }
   }
-  @media (prefers-reduced-motion:reduce){
-    .cards .card:hover{ filter:blur(calc(var(--i) * 2px)); opacity:calc(1 - var(--i) * .16); }
+  @media (max-width:480px){
+    .cards{ min-height:clamp(420px,80vw,480px); }
+    .cards__fan{ width:min(260px,72vw); height:19.5rem; }
+    .cards .card{ padding:26px 18px 22px; }
+    .cards .card[aria-current="false"]{ height:calc(16.5rem - (var(--i) - 1) * 1.5rem); }
+    .card__art{ height:140px; }
+    .card__art svg{ height:118px; }
   }
 
   /* STATS */
@@ -1034,7 +1079,12 @@
         </div>
 
         <div class="cards">
-          <article class="card reveal d1" tabindex="0">
+          <span class="cards__blob cards__blob--1" aria-hidden="true"></span>
+          <span class="cards__blob cards__blob--2" aria-hidden="true"></span>
+          <span class="cards__blob cards__blob--3" aria-hidden="true"></span>
+
+          <div class="cards__fan">
+            <article class="card" tabindex="0">
             <span class="card__tag">01</span>
             <div class="card__art">
               <svg viewBox="0 0 200 290" aria-hidden="true">
@@ -1084,7 +1134,7 @@
             <p>Over seven years of dedication to the specialty coffee movement — honing hospitality, sensory skill, and craft behind the bar.</p>
           </article>
 
-          <article class="card reveal d2" tabindex="0">
+          <article class="card" tabindex="0">
             <span class="card__tag">02</span>
             <div class="card__art">
               <svg viewBox="0 0 200 270" aria-hidden="true">
@@ -1105,7 +1155,7 @@
             <p>A 25-second extraction, a golden crema, and a story in every sip.</p>
           </article>
 
-          <article class="card reveal d3" tabindex="0">
+          <article class="card" tabindex="0">
             <span class="card__tag">03</span>
             <div class="card__art">
               <svg viewBox="0 0 200 270" aria-hidden="true">
@@ -1120,6 +1170,7 @@
             <h3>The Bean</h3>
             <p>Single-origin stories, roasted with intention and ground to order.</p>
           </article>
+          </div>
         </div>
       </div>
     </section>
@@ -1377,13 +1428,13 @@
         <a href="#craft">The craft</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
-        <a href="mailto:resume@willsonrai.com.np">Email</a>
+        <a href="/cdn-cgi/l/email-protection#66140315130b0326110f0a0a15090814070f4805090b480816">Email</a>
       </nav>
       <small>© <span id="yr"></span> Willson Rai · Lalitpur, Nepal · Crafting since 2017.</small>
     </div>
   </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   document.getElementById('yr').textContent = new Date().getFullYear();
   const navToggle = document.getElementById('navToggle');
   const navMobile = document.getElementById('navMobile');
@@ -1640,5 +1691,5 @@
     });
   })();
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2ce78d9ee747b80',t:'MTc4NzAzMDQ1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

@@ -674,6 +674,81 @@
   }
 
   /* ================================================================
+     NEON GLOW — CodeFronts ab-01 treatment, tuned to the site palette.
+     Buttons: pulsing neon halo + colour fill on hover, zero JS.
+     Headings (every section + the name title): pulsing neon text glow.
+  ================================================================ */
+  .btn{
+    --neon:#a855ff;
+    --neon-dim:rgba(168,85,255,.35);
+    border:2px solid var(--neon);
+    color:#fff;
+    text-shadow:0 0 8px rgba(168,85,255,.6);
+    box-shadow:0 0 8px var(--neon-dim),0 0 20px var(--neon-dim),inset 0 0 10px rgba(168,85,255,.08);
+    animation:neonBtnPulse 2s ease-in-out infinite;
+    will-change:box-shadow;
+  }
+  .btn:hover{
+    background:var(--neon);
+    border-color:var(--neon);
+    color:#fff;
+    text-shadow:none;
+    box-shadow:0 0 16px var(--neon),0 0 40px var(--neon),0 0 80px var(--neon-dim),inset 0 0 16px rgba(255,255,255,.15);
+    animation-play-state:paused;
+  }
+  .btn--solid{
+    background:linear-gradient(135deg,#7b6bff,#a855ff);
+    border-color:transparent;
+    box-shadow:0 0 10px rgba(168,85,255,.5),0 0 26px rgba(168,85,255,.3),0 12px 30px rgba(91,70,240,.45);
+  }
+  .btn--solid:hover{
+    background:linear-gradient(135deg,#a855ff,#d946ef);
+    border-color:transparent;
+    box-shadow:0 0 18px var(--neon),0 0 48px var(--neon),0 0 96px var(--neon-dim),0 12px 34px rgba(168,85,255,.55);
+  }
+  @keyframes neonBtnPulse{
+    0%,100%{ box-shadow:0 0 8px var(--neon-dim),0 0 20px var(--neon-dim),inset 0 0 10px rgba(168,85,255,.08); }
+    50%{ box-shadow:0 0 14px var(--neon),0 0 36px var(--neon-dim),0 0 60px rgba(168,85,255,.18),inset 0 0 16px rgba(168,85,255,.14); }
+  }
+
+  /* every heading + the name title get the neon glow */
+  .brand{
+    text-shadow:0 0 12px rgba(168,85,255,.45);
+  }
+  .hero__eyebrow{
+    color:#d8c6ff;
+    text-shadow:0 0 10px rgba(168,85,255,.55);
+  }
+  .hero__title{
+    /* pop entrance (existing) + infinite neon pulse on the glow */
+    animation:pop 1s var(--ease) .12s forwards, neonTitlePulse 2.6s ease-in-out 1.2s infinite;
+  }
+  @keyframes neonTitlePulse{
+    0%,100%{ text-shadow:0 18px 60px rgba(0,0,0,.35), 0 0 18px rgba(168,85,255,.35), 0 0 46px rgba(168,85,255,.18); }
+    50%{ text-shadow:0 18px 60px rgba(0,0,0,.35), 0 0 26px rgba(168,85,255,.65), 0 0 70px rgba(192,38,211,.35); }
+  }
+  .sec-head h2, .cta h2{
+    animation:neonH2Pulse 3s ease-in-out infinite;
+  }
+  @keyframes neonH2Pulse{
+    0%,100%{ text-shadow:0 0 10px rgba(168,85,255,.30), 0 0 30px rgba(168,85,255,.14); }
+    50%{ text-shadow:0 0 16px rgba(168,85,255,.60), 0 0 44px rgba(192,38,211,.28); }
+  }
+  .deck-block__label{
+    color:#d8c6ff;
+    text-shadow:0 0 10px rgba(168,85,255,.55);
+  }
+  .kicker{
+    text-shadow:0 0 8px rgba(168,85,255,.35);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .btn{ animation:none; box-shadow:0 0 10px var(--neon-dim),0 0 22px var(--neon-dim); }
+    .hero__title{ animation:pop 1s var(--ease) .12s forwards; text-shadow:0 18px 60px rgba(0,0,0,.35), 0 0 18px rgba(168,85,255,.5); }
+    .sec-head h2, .cta h2{ animation:none; text-shadow:0 0 12px rgba(168,85,255,.45); }
+  }
+
+  /* ================================================================
      BREW SPLASH — startup preloader, realistic & premium edition.
      Twin-spout espresso pour, rising crema surface with slosh, impact
      ripple, falling drops, glass sheen, five steam wisps, live brew
@@ -720,9 +795,19 @@
     100%{ opacity:0; visibility:hidden; }
   }
   .brew-splash--out{
-    animation:none;
-    opacity:0; visibility:hidden;
-    transition:opacity .55s var(--premium), visibility 0s .55s;
+    animation:brewSplashOut .8s var(--premium) forwards;
+  }
+  @keyframes brewSplashOut{
+    to{ opacity:0; transform:translateY(-5%); filter:blur(14px); visibility:hidden; }
+  }
+  .brew-splash--out .la-11{
+    animation:splashZoomOut .8s var(--premium) forwards;
+  }
+  @keyframes splashZoomOut{
+    to{ opacity:0; scale:1.07; }
+  }
+  .brew-splash:focus-visible{
+    outline:2px solid #c084fc; outline-offset:-8px; border-radius:8px;
   }
 
   /* la-11 loader — rethemed to the portfolio palette */
@@ -747,6 +832,7 @@
     width: 100%;
     display: grid;
     place-items: center;
+    gap: 1.1rem;
     padding: 0;
     color: var(--ink);
     font-family: var(--sans);
@@ -760,35 +846,90 @@
     box-sizing: border-box;
   }
 
-  .la-11__card {
+  /* status stack: small label, big neon percentage (the middle),
+     shimmering progress track */
+  .la-11__status{
+    display:grid; justify-items:center; gap:.8rem;
+    position:relative; z-index:2;
+  }
+  .la-11__label {
+    margin: 0;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.5);
+  }
+  .la-11__ready { display: none; }
+  .la-11__percent{
+    margin:0;
+    font-size: clamp(2.4rem, 6vw, 3rem);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -.04em;
+    font-variant-numeric: tabular-nums;
+    background: linear-gradient(100deg, #c084fc 0%, #818cf8 45%, #00f2ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 12px rgba(168,85,255,.55)) drop-shadow(0 0 34px rgba(0,242,255,.22));
+    animation: percentBreath 2.4s ease-in-out infinite;
+  }
+  @keyframes percentBreath{
+    0%,100%{ scale:1; }
+    50%{ scale:1.05; }
+  }
+  .la-11__track {
+    inline-size: min(16rem, 72vw);
+    block-size: .32rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,.10);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.3), 0 0 12px rgba(168,85,255,.25);
+    overflow: hidden;
+  }
+  .la-11__fill {
+    display: block;
+    block-size: 100%;
+    border-radius: inherit;
+    inline-size: var(--la-11-fill, 62%);
+    background: linear-gradient(90deg, var(--acc), var(--ok));
+    box-shadow: 0 0 16px rgba(168,85,255,.75);
+    animation: la-11-fill var(--dur) ease-in-out infinite;
     position: relative;
-    z-index:1;
-    inline-size: min(20rem,100%);
-    padding: 1.8rem 1.4rem 1.4rem;
-    display: grid;
-    justify-items: center;
-    gap: 1rem;
-    text-align: center;
-    border-radius: 28px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    backdrop-filter: blur(20px) saturate(150%);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(255,255,255,.06), 0 30px 60px -26px rgba(0,0,0,.6);
-    animation: splashCardIn .65s var(--premium) both;
   }
-  /* premium gradient hairline ring */
-  .la-11__card::before{
-    content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
-    background:linear-gradient(160deg, rgba(123,107,255,.55), rgba(255,255,255,.08) 30%, rgba(0,242,255,.35) 70%, rgba(255,255,255,.06));
-    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite:xor;
-    mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite:exclude;
-    pointer-events:none;
+  .la-11__fill::after{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.8), transparent);
+    translate:-100% 0;
+    animation: trackShine 1.5s ease-in-out infinite;
   }
-  @keyframes splashCardIn{
-    from{ opacity:0; scale:.965; translate:0 10px; }
+  @keyframes trackShine{ to{ translate:100% 0; } }
+
+  /* ambient neon particles drifting up */
+  .splash-dot{
+    position:absolute; bottom:14%; left:var(--x);
+    inline-size:4px; block-size:4px; border-radius:50%;
+    background:var(--dc,#c084fc);
+    box-shadow:0 0 8px var(--dc,#c084fc), 0 0 16px var(--dc,#c084fc);
+    opacity:0; pointer-events:none;
+    animation: splashDotRise var(--du,11s) linear var(--d,0s) infinite;
+  }
+  @keyframes splashDotRise{
+    0%{ opacity:0; translate:0 0; }
+    12%{ opacity:.85; }
+    80%{ opacity:.12; }
+    100%{ opacity:0; translate:0 -58vh; }
+  }
+
+  /* site entrance — premium rise after the curtain lifts */
+  .site-in main{ animation: siteRise .95s var(--premium) .08s both; }
+  .site-in .nav{ animation: navDrop .8s var(--premium) .22s both; }
+  .site-in .footer{ animation: siteRise .95s var(--premium) .3s both; }
+  @keyframes siteRise{
+    from{ opacity:0; transform:translateY(30px) scale(.985); }
+  }
+  @keyframes navDrop{
+    from{ opacity:0; transform:translateY(-20px); }
   }
 
   .la-11__stage {
@@ -803,7 +944,8 @@
   .la-11__barista{
     position:absolute; left:.3rem; bottom:0; z-index:1;
     height:10rem; width:auto;
-    filter:drop-shadow(4px 8px 10px rgba(0,0,0,.4));
+    /* neon halo so the character reads as an outlined neon figure */
+    filter:drop-shadow(0 0 4px rgba(168,85,255,.6)) drop-shadow(0 0 14px rgba(168,85,255,.32)) drop-shadow(0 0 34px rgba(0,242,255,.15));
     animation: la-bob 3.8s ease-in-out infinite alternate;
   }
   @keyframes la-bob{
@@ -825,6 +967,7 @@
     transform-box:fill-box;
     transform-origin:50% 0%;
     scale:1 0;
+    filter:drop-shadow(0 0 3px rgba(224,168,106,.9));
     animation: la-11-pour var(--dur) cubic-bezier(.4,0,.6,1) infinite;
   }
   @keyframes la-11-pour {
@@ -838,6 +981,7 @@
     position:absolute; inset-block-start:2.55rem; z-index:3;
     inline-size:.18rem; block-size:.28rem; border-radius:50%;
     background:var(--coffee); opacity:0;
+    box-shadow:0 0 6px rgba(224,168,106,.8);
     animation:la-11-drop var(--dur) linear infinite;
   }
   .la-11__drop--1{ left:4.95rem; animation-delay:.35s; }
@@ -858,7 +1002,8 @@
     block-size: 4rem;
     border-radius: .5rem .5rem 2.2rem 2.2rem / .5rem .5rem 1.8rem 1.8rem;
     background: linear-gradient(180deg, color-mix(in oklab,var(--cup) 90%,var(--ink)) 0%, var(--cup) 30%, color-mix(in oklab,var(--cup) 88%,#7a6a58) 100%);
-    box-shadow: 0 12px 22px -14px color-mix(in oklab,var(--saucer) 80%,black), inset 0 -3px 0 rgba(0,0,0,.08), inset 0 -8px 12px -10px rgba(0,0,0,.35);
+    border:1px solid rgba(168,85,255,.55);
+    box-shadow: 0 0 10px rgba(168,85,255,.4), 0 0 26px rgba(168,85,255,.18), 0 12px 22px -14px color-mix(in oklab,var(--saucer) 80%,black), inset 0 -3px 0 rgba(0,0,0,.08), inset 0 -8px 12px -10px rgba(0,0,0,.35);
   }
   .la-11__liquid {
     position: absolute;
@@ -959,7 +1104,7 @@
     block-size: .6rem;
     border-radius: 999px;
     background: linear-gradient(180deg, var(--saucer), color-mix(in oklab,var(--saucer) 70%,black));
-    box-shadow: inset 0 -2px 3px rgba(0,0,0,.18), inset 0 2px 2px rgba(255,255,255,.5);
+    box-shadow: inset 0 -2px 3px rgba(0,0,0,.18), inset 0 2px 2px rgba(255,255,255,.5), 0 0 14px rgba(168,85,255,.4);
   }
   .la-11__saucer::before{
     content:''; position:absolute; left:50%; top:.08rem;
@@ -976,7 +1121,7 @@
     inline-size: .7rem;
     block-size: 1rem;
     border-radius: 999px;
-    background: linear-gradient(180deg, rgba(255,255,255,.55), transparent);
+    background: linear-gradient(180deg, rgba(0,242,255,.5), transparent);
     filter: blur(4px);
     opacity: 0;
     animation: la-11-steam var(--du,3s) ease-out infinite;
@@ -990,52 +1135,6 @@
   }
 
   /* --- copy + track --- */
-  .la-11__copy { display: grid; gap: .45rem; }
-
-  .la-11__label {
-    margin: 0;
-    font-size: 1.32rem;
-    font-weight: 800;
-    letter-spacing: -.02em;
-    line-height: 1.15;
-    text-wrap: balance;
-  }
-
-  .la-11__ready { display: none; }
-
-  .la-11__meta {
-    margin: 0;
-    font-family: var(--mono);
-    font-size: .6rem;
-    letter-spacing: .22em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,.45);
-  }
-  .la-11__pct{
-    color: var(--acc);
-    font-variant-numeric: tabular-nums;
-    letter-spacing:.08em;
-  }
-
-  .la-11__track {
-    inline-size: 100%;
-    block-size: .35rem;
-    border-radius: 999px;
-    background: rgba(255,255,255,.12);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,.3);
-    overflow: hidden;
-  }
-
-  .la-11__fill {
-    display: block;
-    block-size: 100%;
-    border-radius: inherit;
-    inline-size: var(--la-11-fill, 62%);
-    background: linear-gradient(90deg, var(--acc), var(--ok));
-    box-shadow: 0 0 14px rgba(91,70,240,.65);
-    animation: la-11-fill var(--dur) ease-in-out infinite;
-  }
-
   .la-11.is-ready .la-11__liquid,
   .la-11.is-ready .la-11__fill,
   .la-11.is-ready .la-11__drop,
@@ -1070,7 +1169,6 @@
   }
 
   @media (forced-colors: active) {
-    .la-11__card { border: 1px solid CanvasText; }
     .la-11__cup { border: 1px solid CanvasText; }
     .la-11__fill { background: Highlight; }
   }
@@ -1089,9 +1187,24 @@
   <!-- BREW SPLASH — startup preloader (la-11 coffee brewing loader, adapted).
        Plays once on page load: espresso pours, cup fills, then the splash
        fades out and the site appears. Click anywhere to skip. -->
-  <div class="brew-splash" id="brewSplash" aria-hidden="true">
+  <!-- BREW SPLASH — startup preloader, neon premium edition.
+       No card, no name: neon-outlined barista scene, big gradient
+       brew percentage in the middle, shimmering track, rising glow
+       dots. Plays one brew cycle, then a cinematic curtain reveal
+       lifts the splash and the site rises into place. -->
+  <div class="brew-splash" id="brewSplash" role="button" tabindex="0" aria-label="Brewing. Press Enter or click to skip.">
+    <span class="splash-dot" style="--x:47%; --d:8.5s; --du:11.0s; --s:0.73; --dc:#c084fc"></span>
+    <span class="splash-dot" style="--x:74%; --d:0.8s; --du:11.9s; --s:1.34; --dc:#00f2ff"></span>
+    <span class="splash-dot" style="--x:33%; --d:0.3s; --du:11.2s; --s:0.75; --dc:#c084fc"></span>
+    <span class="splash-dot" style="--x:17%; --d:5.0s; --du:9.3s; --s:1.1; --dc:#00f2ff"></span>
+    <span class="splash-dot" style="--x:34%; --d:5.7s; --du:11.9s; --s:0.74; --dc:#c084fc"></span>
+    <span class="splash-dot" style="--x:80%; --d:3.6s; --du:13.9s; --s:0.73; --dc:#00f2ff"></span>
+    <span class="splash-dot" style="--x:23%; --d:2.6s; --du:9.7s; --s:0.78; --dc:#c084fc"></span>
+    <span class="splash-dot" style="--x:45%; --d:5.0s; --du:12.4s; --s:0.77; --dc:#00f2ff"></span>
+    <span class="splash-dot" style="--x:79%; --d:5.8s; --du:10.9s; --s:1.08; --dc:#c084fc"></span>
+    <span class="splash-dot" style="--x:14%; --d:5.1s; --du:12.1s; --s:1.05; --dc:#00f2ff"></span>
+
     <div class="la-11" data-theme="light" data-state="loading">
-      <section class="la-11__card" role="status" aria-live="polite" aria-label="Brewing your experience">
         <div class="la-11__stage" aria-hidden="true">
           <span class="la-11__shadow"></span>
 
@@ -1108,21 +1221,21 @@
             </defs>
 
             <!-- feet -->
-            <ellipse cx="86" cy="406" rx="19" ry="8" fill="#0a0716"/>
-            <ellipse cx="122" cy="406" rx="19" ry="8" fill="#0a0716"/>
+            <ellipse cx="86" cy="406" rx="19" ry="8" fill="#0a0716" stroke="#a855f7" stroke-width="1.5"/>
+            <ellipse cx="122" cy="406" rx="19" ry="8" fill="#0a0716" stroke="#a855f7" stroke-width="1.5"/>
             <!-- legs -->
-            <rect x="72" y="332" width="22" height="80" rx="10" fill="url(#la-pants)"/>
-            <rect x="112" y="332" width="22" height="80" rx="10" fill="url(#la-pants)"/>
+            <rect x="72" y="332" width="22" height="80" rx="10" fill="url(#la-pants)" stroke="#a855f7" stroke-width="1.5"/>
+            <rect x="112" y="332" width="22" height="80" rx="10" fill="url(#la-pants)" stroke="#a855f7" stroke-width="1.5"/>
             <!-- left arm on hip (behind torso) -->
             <path d="M74 195 C52 205 46 236 56 253" fill="none" stroke="url(#la-shirt)" stroke-width="20" stroke-linecap="round"/>
             <circle cx="59" cy="257" r="10" fill="url(#la-skin)"/>
             <!-- torso -->
-            <path d="M64 190 Q64 168 80 166 L126 166 Q142 168 142 190 L152 340 L54 340 Z" fill="url(#la-shirt)"/>
+            <path d="M64 190 Q64 168 80 166 L126 166 Q142 168 142 190 L152 340 L54 340 Z" fill="url(#la-shirt)" stroke="#a855f7" stroke-width="2"/>
             <!-- apron -->
-            <path d="M76 200 L130 200 L138 340 L68 340 Z" fill="url(#la-apron)"/>
+            <path d="M76 200 L130 200 L138 340 L68 340 Z" fill="url(#la-apron)" stroke="#67e8f9" stroke-width="1.5"/>
             <path d="M76 200 L84 172 L98 200" fill="none" stroke="#c9b68f" stroke-width="5" stroke-linecap="round"/>
             <path d="M130 200 L122 172 L108 200" fill="none" stroke="#c9b68f" stroke-width="5" stroke-linecap="round"/>
-            <rect x="90" y="262" width="28" height="18" rx="4" fill="none" stroke="#b8a37a" stroke-width="2"/>
+            <rect x="90" y="262" width="28" height="18" rx="4" fill="none" stroke="#67e8f9" stroke-width="2" opacity=".9"/>
             <g fill="#6b4f2e" font-family="Inter, sans-serif" font-weight="800" text-anchor="middle">
               <text x="103" y="240" font-size="10" letter-spacing="1.1">BARISTA</text>
               <text x="103" y="252" font-size="10" letter-spacing="1.1">BOYS</text>
@@ -1130,11 +1243,11 @@
             <!-- neck -->
             <rect x="94" y="142" width="18" height="30" rx="7" fill="url(#la-skin)"/>
             <!-- head -->
-            <circle cx="103" cy="112" r="40" fill="url(#la-skin)"/>
+            <circle cx="103" cy="112" r="40" fill="url(#la-skin)" stroke="#c084fc" stroke-width="2"/>
             <circle cx="64" cy="114" r="7" fill="#c4956a"/>
             <circle cx="142" cy="114" r="7" fill="#c4956a"/>
             <!-- cap -->
-            <path d="M60 96 Q60 52 103 52 Q146 52 146 96 L146 102 L60 102 Z" fill="url(#la-cap)"/>
+            <path d="M60 96 Q60 52 103 52 Q146 52 146 96 L146 102 L60 102 Z" fill="url(#la-cap)" stroke="#a855f7" stroke-width="2"/>
             <ellipse cx="103" cy="102" rx="46" ry="7" fill="#120a05"/>
             <circle cx="103" cy="52" r="6" fill="#c08552"/>
             <!-- face -->
@@ -1151,8 +1264,8 @@
               <path d="M132 190 C166 178 188 158 196 140" fill="none" stroke="url(#la-shirt)" stroke-width="23" stroke-linecap="round"/>
               <circle cx="197" cy="138" r="11" fill="url(#la-skin)"/>
               <g class="la-11__pitcher" transform="rotate(16 188 122)">
-                <path d="M172 88 L200 88 L208 116 Q208 144 186 144 Q164 144 164 116 Z" fill="url(#la-steel)" stroke="#6f7683" stroke-width="2"/>
-                <path d="M198 92 Q214 84 218 97 Q209 105 198 102 Z" fill="url(#la-steel)" stroke="#6f7683" stroke-width="2"/>
+                <path d="M172 88 L200 88 L208 116 Q208 144 186 144 Q164 144 164 116 Z" fill="url(#la-steel)" stroke="#67e8f9" stroke-width="2"/>
+                <path d="M198 92 Q214 84 218 97 Q209 105 198 102 Z" fill="url(#la-steel)" stroke="#67e8f9" stroke-width="2"/>
                 <rect x="170" y="100" width="5" height="22" rx="2.5" fill="#ffffff" opacity=".55"/>
               </g>
             </g>
@@ -1180,18 +1293,16 @@
           <span class="la-11__saucer"></span>
         </div>
 
-        <div class="la-11__copy">
-          <p class="la-11__label">
-            <span class="la-11__load">Brewing your experience</span>
-            <span class="la-11__ready">Served fresh — step in</span>
-          </p>
-          <p class="la-11__meta">Willson Rai <span aria-hidden="true">·</span> Head Barista <span aria-hidden="true">·</span> <span class="la-11__pct">0%</span></p>
-        </div>
-
+      <div class="la-11__status" role="status" aria-live="polite" aria-label="Brewing your experience">
+        <p class="la-11__label">
+          <span class="la-11__load">Brewing your experience</span>
+          <span class="la-11__ready">Served fresh — step in</span>
+        </p>
+        <p class="la-11__percent" aria-hidden="true"><span class="la-11__pct">0%</span></p>
         <div class="la-11__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-valuetext="62 percent brewed">
           <span class="la-11__fill"></span>
         </div>
-      </section>
+      </div>
     </div>
   </div>
 
@@ -1919,7 +2030,7 @@
         <a href="#craft">The craft</a>
         <a href="#services">Services</a>
         <a href="#contact">Contact</a>
-        <a href="/cdn-cgi/l/email-protection#295b4c5a5c444c695e4045455a46475b4840074a4644074759">Email</a>
+        <a href="/cdn-cgi/l/email-protection#b9cbdccaccd4dcf9ced0d5d5cad6d7cbd8d097dad6d497d7c9">Email</a>
       </nav>
       <div class="footer__socials" aria-label="Social links">
         <a href="https://www.instagram.com/willson_obito/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
@@ -2142,9 +2253,10 @@
 </script>
 
 <script>
-  // BREW SPLASH — startup preloader timeline.
-  // One brew cycle (~2.6s), "served" beat, then the splash fades out.
-  // Click anywhere on it to skip straight to the fade.
+  // BREW SPLASH — startup preloader timeline, neon premium edition.
+  // One brew cycle (~2.6s), "served" beat, then a cinematic curtain
+  // lift: the splash blurs away while the site rises into place.
+  // Click anywhere, or press Enter/Space (keyboard accessible) to skip.
   (function(){
     var splash = document.getElementById('brewSplash');
     if (!splash) return;
@@ -2186,22 +2298,30 @@
       if (!splash.isConnected) return;
       if (raf) cancelAnimationFrame(raf);
       splash.classList.add('brew-splash--out');
+      document.body.classList.add('site-in'); // premium site entrance
       setTimeout(function(){
         if (splash.isConnected) splash.remove();
         document.documentElement.style.overflow = '';
-      }, 620);
+      }, 850);
     }
 
     var tReady = setTimeout(markReady, 1700);   // cup full -> "Served fresh"
-    var tFade  = setTimeout(fadeOut,  2800);   // fade into the site
+    var tFade  = setTimeout(fadeOut,  2800);   // curtain lift into the site
     var tKill  = setTimeout(fadeOut,  8000);   // absolute failsafe
 
-    splash.addEventListener('click', function(){
+    function skip(){
       clearTimeout(tReady); clearTimeout(tFade); clearTimeout(tKill);
       markReady();
       fadeOut();
+    }
+    splash.addEventListener('click', skip);
+    splash.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+        e.preventDefault();
+        skip();
+      }
     });
   })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2cf55e54ab7b01a',t:'MTc4NzAzOTUwOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2cfa1032b7a7674',t:'MTc4NzA0MjU4Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

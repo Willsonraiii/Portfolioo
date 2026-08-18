@@ -358,19 +358,20 @@
   /* CARDS */
   .cards{
     position:relative; display:grid; place-items:center;
-    min-height:clamp(420px,50vw,500px); margin-top:8px;
+    min-height:clamp(400px,50vw,500px); margin-top:8px;
+    cursor:pointer;
   }
   .cards .card{
     --i:0;
-    position:absolute; top:50%; left:50%; width:min(300px,88%);
+    position:absolute; top:50%; left:50%; width:min(300px,80vw);
     isolation:isolate; text-align:center;
     border-radius:var(--radius); padding:34px 26px 28px;
     background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
     backdrop-filter:blur(14px) saturate(150%); -webkit-backdrop-filter:blur(14px) saturate(150%);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.3), inset 0 -1px 0 rgba(255,255,255,.06), 0 30px 60px -26px rgba(0,0,0,.6);
     transform-origin:bottom center;
-    rotate:calc(var(--i) * 4deg);
-    translate:calc(-50% + var(--i) * 1.6rem) calc(-50% + var(--i) * .35rem);
+    rotate:calc(var(--i) * 3deg);
+    translate:calc(-50% + var(--i) * clamp(.7rem,3vw,1.6rem)) calc(-50% + var(--i) * .3rem);
     z-index:calc(10 - var(--i));
     transition:rotate .38s var(--premium), translate .38s var(--premium), filter .5s var(--premium), box-shadow .5s var(--premium);
   }
@@ -378,9 +379,10 @@
   .cards .card:nth-child(2){ --i:1; filter:blur(2px); opacity:.85; }
   .cards .card:nth-child(3){ --i:2; filter:blur(4px); opacity:.68; }
   .cards:hover .card,
-  .cards:focus-within .card{
-    rotate:calc(var(--i) * 7deg);
-    translate:calc(-50% + var(--i) * 3.1rem) calc(-50% + var(--i) * -.4rem);
+  .cards:focus-within .card,
+  .cards.is-open .card{
+    rotate:calc(var(--i) * 6deg);
+    translate:calc(-50% + var(--i) * clamp(1.3rem,7vw,3.1rem)) calc(-50% + var(--i) * -.35rem);
     filter:blur(0); opacity:1;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 34px 74px -26px rgba(0,0,0,.65);
   }
@@ -400,15 +402,18 @@
   @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
     .cards .card{ background:rgba(27,21,64,.94); }
   }
-  @media (max-width:820px){
-    .cards{ position:static; display:flex; flex-direction:column; gap:24px; min-height:auto; margin-top:0; }
-    .cards .card{ position:static; width:100%; rotate:none !important; translate:none !important; filter:none !important; opacity:1 !important; }
+  @media (max-width:480px){
+    .cards{ min-height:clamp(380px,86vw,440px); }
+    .cards .card{ width:82vw; padding:28px 20px 24px; }
+    .card__art{ height:130px; }
+    .card__art svg{ height:110px; }
   }
   @media (prefers-reduced-motion:reduce){
     .cards:hover .card,
-    .cards:focus-within .card{
-      rotate:calc(var(--i) * 4deg);
-      translate:calc(-50% + var(--i) * 1.6rem) calc(-50% + var(--i) * .35rem);
+    .cards:focus-within .card,
+    .cards.is-open .card{
+      rotate:calc(var(--i) * 3deg);
+      translate:calc(-50% + var(--i) * clamp(.7rem,3vw,1.6rem)) calc(-50% + var(--i) * .3rem);
     }
   }
 
@@ -1603,6 +1608,22 @@
     return d.innerHTML;
   }
 })();
+</script>
+<script>
+  (function(){
+    var deck = document.querySelector('.cards');
+    if (!deck) return;
+    deck.addEventListener('click', function(e){
+      // don't toggle closed again if focus landed on a card via this same click
+      deck.classList.toggle('is-open');
+    });
+    // tapping/clicking outside the deck closes it again
+    document.addEventListener('click', function(e){
+      if (deck.classList.contains('is-open') && !deck.contains(e.target)) {
+        deck.classList.remove('is-open');
+      }
+    });
+  })();
 </script>
 </body>
 </html>

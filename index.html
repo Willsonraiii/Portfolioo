@@ -359,32 +359,29 @@
   .cards{
     position:relative; display:grid; place-items:center;
     min-height:clamp(400px,50vw,500px); margin-top:8px;
-    cursor:pointer;
   }
   .cards .card{
     --i:0;
+    --step-x:clamp(1.6rem,7vw,2.8rem);
+    --step-y:.4rem;
+    --step-rot:2deg;
     position:absolute; top:50%; left:50%; width:min(300px,80vw);
-    isolation:isolate; text-align:center;
+    isolation:isolate; text-align:center; cursor:pointer;
     border-radius:var(--radius); padding:34px 26px 28px;
     background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
     backdrop-filter:blur(14px) saturate(150%); -webkit-backdrop-filter:blur(14px) saturate(150%);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.3), inset 0 -1px 0 rgba(255,255,255,.06), 0 30px 60px -26px rgba(0,0,0,.6);
     transform-origin:bottom center;
-    rotate:calc(var(--i) * 3deg);
-    translate:calc(-50% + var(--i) * clamp(.7rem,3vw,1.6rem)) calc(-50% + var(--i) * .3rem);
+    rotate:calc(var(--i) * var(--step-rot));
+    translate:calc(-50% + var(--i) * var(--step-x)) calc(-50% + var(--i) * var(--step-y));
+    filter:blur(calc(var(--i) * 2px));
+    opacity:calc(1 - var(--i) * .16);
     z-index:calc(10 - var(--i));
-    transition:rotate .38s var(--premium), translate .38s var(--premium), filter .5s var(--premium), box-shadow .5s var(--premium);
+    transition:rotate .55s var(--premium), translate .55s var(--premium), filter .55s var(--premium), opacity .55s var(--premium), box-shadow .55s var(--premium);
   }
-  .cards .card:nth-child(1){ --i:0; filter:blur(0); opacity:1; }
-  .cards .card:nth-child(2){ --i:1; filter:blur(2px); opacity:.85; }
-  .cards .card:nth-child(3){ --i:2; filter:blur(4px); opacity:.68; }
-  .cards:hover .card,
-  .cards:focus-within .card,
-  .cards.is-open .card{
-    rotate:calc(var(--i) * 6deg);
-    translate:calc(-50% + var(--i) * clamp(1.3rem,7vw,3.1rem)) calc(-50% + var(--i) * -.35rem);
-    filter:blur(0); opacity:1;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 34px 74px -26px rgba(0,0,0,.65);
+  .cards .card:hover{
+    filter:blur(calc(var(--i) * 1px));
+    opacity:calc(1 - var(--i) * .06);
   }
   .cards .card:focus-visible{ outline:2px solid var(--purple-2); outline-offset:3px; }
   .card__art{ position:relative; height:170px; display:grid; place-items:center; margin-bottom:16px; }
@@ -403,18 +400,16 @@
     .cards .card{ background:rgba(27,21,64,.94); }
   }
   @media (max-width:480px){
-    .cards{ min-height:clamp(380px,86vw,440px); }
-    .cards .card{ width:82vw; padding:28px 20px 24px; }
-    .card__art{ height:130px; }
-    .card__art svg{ height:110px; }
+    .cards{ min-height:clamp(360px,80vw,420px); }
+    .cards .card{
+      --step-x:clamp(1.1rem,6.5vw,1.9rem); --step-rot:1deg;
+      width:min(260px,72vw); padding:26px 18px 22px;
+    }
+    .card__art{ height:120px; }
+    .card__art svg{ height:100px; }
   }
   @media (prefers-reduced-motion:reduce){
-    .cards:hover .card,
-    .cards:focus-within .card,
-    .cards.is-open .card{
-      rotate:calc(var(--i) * 3deg);
-      translate:calc(-50% + var(--i) * clamp(.7rem,3vw,1.6rem)) calc(-50% + var(--i) * .3rem);
-    }
+    .cards .card:hover{ filter:blur(calc(var(--i) * 2px)); opacity:calc(1 - var(--i) * .16); }
   }
 
   /* STATS */
@@ -1613,15 +1608,35 @@
   (function(){
     var deck = document.querySelector('.cards');
     if (!deck) return;
-    deck.addEventListener('click', function(e){
-      // don't toggle closed again if focus landed on a card via this same click
-      deck.classList.toggle('is-open');
-    });
-    // tapping/clicking outside the deck closes it again
-    document.addEventListener('click', function(e){
-      if (deck.classList.contains('is-open') && !deck.contains(e.target)) {
-        deck.classList.remove('is-open');
-      }
+    var cards = Array.prototype.slice.call(deck.querySelectorAll('.card'));
+    if (!cards.length) return;
+
+    var order = cards.slice(); // order[0] is always the front card
+
+    function applyOrder(){
+      order.forEach(function(card, i){
+        card.style.setProperty('--i', i);
+        card.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+      });
+    }
+    applyOrder();
+
+    function bringToFront(card){
+      if (order[0] === card) return; // already front, nothing to do
+      order = [card].concat(order.filter(function(c){ return c !== card; }));
+      applyOrder();
+    }
+
+    cards.forEach(function(card){
+      card.addEventListener('click', function(){
+        bringToFront(card);
+      });
+      card.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+          e.preventDefault();
+          bringToFront(card);
+        }
+      });
     });
   })();
 </script>

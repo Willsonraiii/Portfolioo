@@ -383,6 +383,7 @@
     width:min(300px,80vw);
     height:23rem;
   }
+  .cards__fan--4{ --fan-n:4; }
   .cards .card{
     --i:0;
     --step-x:2.75rem;             /* per-depth offset right (gm-03 direction; wider than the
@@ -449,12 +450,41 @@
     .cards:hover .card{ --spread:1; --rot:0deg; }
   }
   @media (max-width:480px){
-    .cards{ min-height:clamp(420px,80vw,480px); }
-    .cards__fan{ width:min(260px,72vw); height:19.5rem; }
-    .cards .card{ padding:26px 18px 22px; }
+    .cards{ min-height:clamp(470px,95vw,560px); }
+    .cards__fan{
+      --step-x-m:2rem; /* per-depth offset on small screens */
+      width:min(260px,72vw); height:19.5rem;
+      /* center the WHOLE group: the fan extends (n-1) steps to the right,
+         so pull it left by half that extension */
+      transform:translateX(calc(-1 * (var(--fan-n, 3) - 1) * var(--step-x-m) / 2));
+    }
+    .cards .card{
+      --step-x:var(--step-x-m); --step-y:-1.5rem;
+      padding:26px 18px 22px;
+    }
+    /* 4-card deck: tighter step so the wider fan still fits narrow phones */
+    .cards__fan--4{ --step-x-m:1.7rem; }
     .cards .card[aria-current="false"]{ height:calc(16.5rem - (var(--i) - 1) * 1.5rem); }
     .card__art{ height:140px; }
     .card__art svg{ height:118px; }
+  }
+  /* gentler fan spread on narrow windows with a mouse (touch has no hover) */
+  @media (hover:hover) and (max-width:480px){
+    .cards:hover .card{ --spread:1.12; }
+  }
+
+  /* SERVICES — merged creative + freelance, side-by-side stack decks */
+  .cards-row{
+    display:grid; grid-template-columns:1fr 1fr; gap:clamp(44px,6vw,90px);
+    align-items:start; margin-top:clamp(40px,6vw,64px);
+  }
+  .deck-block{ display:grid; justify-items:center; gap:10px; }
+  .deck-block__label{
+    margin:0; font-size:11px; font-weight:700; letter-spacing:.24em;
+    text-transform:uppercase; color:var(--purple-2);
+  }
+  @media (max-width:960px){
+    .cards-row{ grid-template-columns:1fr; gap:clamp(56px,8vw,80px); }
   }
 
   /* STATS */
@@ -467,58 +497,8 @@
   .stat b{ display:block; font-size:clamp(2rem,5vw,3rem); font-weight:900; letter-spacing:-.03em; line-height:1; }
   .stat span{ display:block; margin-top:10px; color:var(--muted); font-size:13px; letter-spacing:.04em; }
 
-  /* FEATURES */
-  .features{ display:grid; gap:clamp(18px,2.4vw,28px); grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); margin-top:clamp(40px,6vw,64px); }
-  .feature{ padding:26px; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); transition:transform .35s var(--ease), border-color .35s var(--ease); }
-  .feature:hover{ transform:translateY(-5px); border-color:rgba(123,107,255,.45); }
-  .feature__ico{ width:46px; height:46px; border-radius:12px; display:grid; place-items:center; background:linear-gradient(135deg,var(--purple),var(--purple-dk)); margin-bottom:16px; box-shadow:0 10px 24px rgba(91,70,240,.4); }
-  .feature h3{ margin:0 0 8px; font-size:17px; font-weight:800; }
-  .feature p{ margin:0; color:var(--muted); font-size:14px; }
 
-  /* OVERLAY STYLES */
-  .skill-overlay {
-    position: fixed; inset: 0; z-index: 100;
-    background: var(--bg);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none;
-    transition: opacity .5s var(--ease);
-    overflow-y: auto;
-  }
-  .skill-overlay.active { opacity: 1; pointer-events: auto; }
-  
-  .overlay-close {
-    position: fixed; top: 30px; right: 30px; z-index: 110;
-    background: var(--card); border: 1px solid var(--line);
-    color: #fff; width: 50px; height: 50px; border-radius: 50%;
-    display: grid; place-items: center; cursor: pointer;
-    transition: transform .3s var(--ease), background .3s var(--ease);
-  }
-  .overlay-close:hover { transform: rotate(90deg) scale(1.1); background: var(--purple); }
 
-  .overlay-grid {
-    display: grid; gap: 60px;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding-block: 60px;
-  }
-  .overlay-visual {
-    display: grid; place-items: center;
-    filter: drop-shadow(0 40px 60px rgba(0,0,0,0.5));
-  }
-  .overlay-visual svg { width: 100%; max-width: 400px; height: auto; }
-  .overlay-text { text-align: left; }
-  .overlay-text h2 { font-size: clamp(2.5rem, 5vw, 4.5rem); margin: 0 0 20px; text-transform: uppercase; font-weight: 900; letter-spacing: -0.04em; }
-  .overlay-body { color: var(--muted); font-size: 18px; line-height: 1.6; margin-bottom: 40px; }
-  
-  .feature { cursor: pointer; transition: all .4s var(--ease); }
-  .feature:active { transform: scale(0.96); }
-
-  @media (max-width: 900px) {
-    .overlay-grid { grid-template-columns: 1fr; text-align: center; }
-    .overlay-text { text-align: center; }
-  }
-
-  /* CTA */
   .cta{
     position:relative; overflow:hidden; text-align:center;
     border:1px solid var(--line); border-radius:28px;
@@ -537,59 +517,15 @@
   .footer__links{ display:flex; gap:22px; flex-wrap:wrap; }
   .footer__links a{ color:var(--muted); font-size:14px; transition:color .25s var(--ease); }
   .footer__links a:hover{ color:var(--ink); }
-  /* Floating socials — visible on every section, not just footer */
-  @keyframes floatBob{
-    0%,100%{ transform:translateY(-50%) translateY(0); }
-    50%{ transform:translateY(-50%) translateY(-6px); }
+  .footer__socials{ display:flex; gap:10px; align-items:center; }
+  .footer__socials a{
+    display:grid; place-items:center; width:38px; height:38px; border-radius:50%;
+    color:var(--muted); background:rgba(255,255,255,.05); border:1px solid var(--line);
+    transition:color .3s var(--ease), background .3s var(--ease), transform .3s var(--ease), border-color .3s var(--ease);
   }
-  @keyframes floatIn{
-    from{ opacity:0; transform:translateY(-50%) translateX(24px); }
-    to{ opacity:1; transform:translateY(-50%) translateX(0); }
-  }
-  @keyframes iconPop{
-    from{ opacity:0; transform:scale(.4) rotate(-20deg); }
-    to{ opacity:1; transform:scale(1) rotate(0); }
-  }
-  .float-social{
-    position:fixed; right:14px; top:50%; z-index:80;
-    display:flex; flex-direction:column; align-items:center; gap:6px;
-    padding:7px; border-radius:999px;
-    background:linear-gradient(180deg, rgba(33,26,77,.55), rgba(20,16,42,.45));
-    border:1px solid rgba(255,255,255,.14);
-    backdrop-filter:saturate(180%) blur(20px);
-    -webkit-backdrop-filter:saturate(180%) blur(20px);
-    box-shadow:0 8px 32px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.03) inset, 0 1px 0 rgba(255,255,255,.08) inset;
-    animation:floatIn .6s var(--ease) both, floatBob 5s ease-in-out .6s infinite;
-  }
-  .float-social a{
-    position:relative;
-    color:var(--muted); display:grid; place-items:center;
-    width:32px; height:32px; border-radius:50%;
-    background:rgba(255,255,255,.03);
-    transition:color .3s var(--ease), background .3s var(--ease), transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s var(--ease);
-    animation:iconPop .5s var(--ease) both;
-  }
-  .float-social a:nth-child(1){ animation-delay:.15s; }
-  .float-social a:nth-child(2){ animation-delay:.25s; }
-  .float-social a:nth-child(3){ animation-delay:.35s; }
-  .float-social a:hover{
-    color:var(--ink);
-    background:rgba(123,107,255,.28);
-    transform:scale(1.16) translateX(-3px);
-    box-shadow:0 0 0 1px rgba(123,107,255,.5), 0 6px 18px rgba(91,70,240,.45);
-  }
-  .float-social a:active{ transform:scale(.96) translateX(-1px); }
-  .float-social svg{ width:14px; height:14px; transition:transform .3s var(--ease); }
-  .float-social a:hover svg{ transform:scale(1.08); }
-  @media (max-width: 480px){
-    .float-social{ right:8px; padding:6px; gap:5px; }
-    .float-social a{ width:30px; height:30px; }
-    .float-social svg{ width:13px; height:13px; }
-  }
-  @media (prefers-reduced-motion: reduce){
-    .float-social{ animation:none; }
-    .float-social a{ animation:none; }
-  }
+  .footer__socials a:hover{ color:var(--ink); background:rgba(123,107,255,.28); border-color:rgba(123,107,255,.5); transform:translateY(-3px); }
+  .footer__socials svg{ width:16px; height:16px; }
+  .about .stats{ margin-top:clamp(40px,6vw,64px); }
   .footer small{ color:var(--muted-2); font-size:13px; }
 
   /* REVEAL */
@@ -736,6 +672,409 @@
     .footer__inner{ flex-direction:column; align-items:flex-start; }
     .bean{ display:none; }
   }
+
+  /* ================================================================
+     BREW SPLASH — startup preloader, realistic & premium edition.
+     Twin-spout espresso pour, rising crema surface with slosh, impact
+     ripple, falling drops, glass sheen, five steam wisps, live brew
+     percentage — all CSS, no images. Dark glass to match the site.
+  ================================================================ */
+  @property --la-11-fill {
+    syntax: '<percentage>';
+    inherits: true;   /* children (surface, impact) must inherit the animated value */
+    initial-value: 0%;
+  }
+
+  .brew-splash{
+    position:fixed; inset:0; z-index:10000;
+    display:grid; place-items:center;
+    padding:clamp(1.25rem,5vw,4rem);
+    background:
+      radial-gradient(55% 45% at 82% 12%, rgba(91,70,240,.32), transparent 62%),
+      radial-gradient(45% 42% at 12% 88%, rgba(0,242,255,.10), transparent 60%),
+      radial-gradient(40% 36% at 90% 78%, rgba(255,153,0,.07), transparent 58%),
+      var(--bg);
+    /* failsafe: even with JS off, the splash removes itself */
+    animation:brewSplashAuto 9s linear forwards;
+  }
+  /* drifting premium glow blobs */
+  .brew-splash::before,
+  .brew-splash::after{
+    content:''; position:absolute; z-index:0; border-radius:50%;
+    pointer-events:none; filter:blur(80px); will-change:transform;
+  }
+  .brew-splash::before{
+    width:32rem; height:32rem; top:-7rem; right:-5rem;
+    background:rgba(91,70,240,.30);
+    animation:splashBlobA 12s ease-in-out infinite alternate;
+  }
+  .brew-splash::after{
+    width:26rem; height:26rem; bottom:-6rem; left:-5rem;
+    background:rgba(0,242,255,.16);
+    animation:splashBlobB 16s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes splashBlobA{ from{ transform:translate3d(0,0,0) scale(1); } to{ transform:translate3d(-9%,11%,0) scale(1.15); } }
+  @keyframes splashBlobB{ from{ transform:translate3d(0,0,0) scale(1); } to{ transform:translate3d(10%,-8%,0) scale(1.2); } }
+  @keyframes brewSplashAuto{
+    0%,96%{ opacity:1; }
+    100%{ opacity:0; visibility:hidden; }
+  }
+  .brew-splash--out{
+    animation:none;
+    opacity:0; visibility:hidden;
+    transition:opacity .55s var(--premium), visibility 0s .55s;
+  }
+
+  /* la-11 loader — rethemed to the portfolio palette */
+  .la-11 {
+    --bg: transparent;
+    --surface: rgba(255,255,255,.06);   /* site glass, like the stack cards */
+    --ink: #ffffff;
+    --muted: rgba(255,255,255,.62);
+    --line: rgba(255,255,255,.14);
+    --coffee: #241409;
+    --crema: #d99a5b;
+    --cup: #ffffff;
+    --saucer: #d9c9b3;
+    --acc: #7b6bff;
+    --ok: #00f2ff;
+    --ring: #7b6bff;
+    --shadow: rgba(0,0,0,.6);
+    --dur: 2.6s;
+    --sans: 'Inter',system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --mono: ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+    position: relative;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .la-11,
+  .la-11 *,
+  .la-11 *::before,
+  .la-11 *::after {
+    box-sizing: border-box;
+  }
+
+  .la-11__card {
+    position: relative;
+    z-index:1;
+    inline-size: min(20rem,100%);
+    padding: 1.8rem 1.4rem 1.4rem;
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    text-align: center;
+    border-radius: 28px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(150%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.28), inset 0 -1px 0 rgba(255,255,255,.06), 0 30px 60px -26px rgba(0,0,0,.6);
+    animation: splashCardIn .65s var(--premium) both;
+  }
+  /* premium gradient hairline ring */
+  .la-11__card::before{
+    content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
+    background:linear-gradient(160deg, rgba(123,107,255,.55), rgba(255,255,255,.08) 30%, rgba(0,242,255,.35) 70%, rgba(255,255,255,.06));
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;
+    mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite:exclude;
+    pointer-events:none;
+  }
+  @keyframes splashCardIn{
+    from{ opacity:0; scale:.965; translate:0 10px; }
+  }
+
+  .la-11__stage {
+    position: relative;
+    inline-size: 10.6rem;
+    block-size: 10rem;
+    display: grid;
+    place-items: end center;
+  }
+
+  /* --- Willson: 3D vector barista (left), pouring into the cup --- */
+  .la-11__barista{
+    position:absolute; left:.3rem; bottom:0; z-index:1;
+    height:10rem; width:auto;
+    filter:drop-shadow(4px 8px 10px rgba(0,0,0,.4));
+    animation: la-bob 3.8s ease-in-out infinite alternate;
+  }
+  @keyframes la-bob{
+    from{ translate:0 0; }
+    to{ translate:0 -3px; }
+  }
+  /* the pouring arm + pitcher: gentle tilt loop (origin at the shoulder) */
+  .la-11__arm{
+    transform-box:fill-box;
+    transform-origin:7% 95%;
+    animation: la-pourArm 2.6s ease-in-out infinite;
+  }
+  @keyframes la-pourArm{
+    0%,100%{ rotate:0deg; }
+    50%{ rotate:2.4deg; }
+  }
+  /* the pour stream: pulses with the brew cycle (origin at the spout) */
+  .la-11__stream{
+    transform-box:fill-box;
+    transform-origin:50% 0%;
+    scale:1 0;
+    animation: la-11-pour var(--dur) cubic-bezier(.4,0,.6,1) infinite;
+  }
+  @keyframes la-11-pour {
+    0% { scale: 1 0; }
+    10%, 60% { scale: 1 1; }
+    72%, 100% { scale: 1 0; }
+  }
+
+  /* stray droplets falling beside the stream */
+  .la-11__drop{
+    position:absolute; inset-block-start:2.55rem; z-index:3;
+    inline-size:.18rem; block-size:.28rem; border-radius:50%;
+    background:var(--coffee); opacity:0;
+    animation:la-11-drop var(--dur) linear infinite;
+  }
+  .la-11__drop--1{ left:4.95rem; animation-delay:.35s; }
+  .la-11__drop--2{ left:5.6rem; animation-delay:.9s; }
+  @keyframes la-11-drop {
+    0%, 8% { opacity:0; translate:0 0; }
+    12% { opacity:.9; }
+    55% { opacity:.6; translate:0 1.4rem; }
+    62%, 100% { opacity:0; translate:0 1.7rem; }
+  }
+
+  /* --- cup: under the spout, to the character's right --- */
+  .la-11__cup {
+    position: absolute;
+    left:2.8rem; bottom:.55rem;
+    z-index:2;
+    inline-size: 5rem;
+    block-size: 4rem;
+    border-radius: .5rem .5rem 2.2rem 2.2rem / .5rem .5rem 1.8rem 1.8rem;
+    background: linear-gradient(180deg, color-mix(in oklab,var(--cup) 90%,var(--ink)) 0%, var(--cup) 30%, color-mix(in oklab,var(--cup) 88%,#7a6a58) 100%);
+    box-shadow: 0 12px 22px -14px color-mix(in oklab,var(--saucer) 80%,black), inset 0 -3px 0 rgba(0,0,0,.08), inset 0 -8px 12px -10px rgba(0,0,0,.35);
+  }
+  .la-11__liquid {
+    position: absolute;
+    inset: .28rem .3rem .1rem;
+    z-index:1;
+    overflow: hidden;
+    border-radius: .3rem .3rem 2rem 2rem / .3rem .3rem 1.6rem 1.6rem;
+    background: linear-gradient(to top,
+        var(--coffee) 0 var(--la-11-fill, 62%),
+        var(--crema) var(--la-11-fill, 62%) calc(var(--la-11-fill, 62%) + 7%),
+        transparent calc(var(--la-11-fill, 62%) + 9%));
+    animation: la-11-fill var(--dur) ease-in-out infinite;
+  }
+  @keyframes la-11-fill {
+    0% { --la-11-fill: 4%; }
+    66%, 88% { --la-11-fill: 88%; }
+    100% { --la-11-fill: 4%; }
+  }
+
+  /* rising coffee surface — the crema top, gently sloshing */
+  .la-11__surface{
+    position:absolute; left:2%; right:2%;
+    bottom:calc(var(--la-11-fill, 62%) + 7%);
+    height:.44rem; translate:0 55%;
+    border-radius:50%;
+    background:
+      radial-gradient(2.5px 2px at 22% 40%, rgba(255,240,215,.65), transparent 70%),
+      radial-gradient(2px 2px at 47% 55%, rgba(255,240,215,.45), transparent 70%),
+      radial-gradient(2.5px 2px at 71% 38%, rgba(255,240,215,.55), transparent 70%),
+      radial-gradient(2px 2px at 84% 58%, rgba(255,240,215,.4), transparent 70%),
+      linear-gradient(180deg, #eabf8a 0%, #c98f52 60%, #a86a33 100%);
+    box-shadow: 0 1px 2px rgba(0,0,0,.3);
+    animation: la-11-slosh 2.4s ease-in-out infinite alternate;
+  }
+  @keyframes la-11-slosh {
+    from{ scale:1 .92; }
+    to{ scale:.93 1.06; }
+  }
+
+  /* the ripple where the pour meets the surface */
+  .la-11__impact{
+    position:absolute; left:50%;
+    bottom:calc(var(--la-11-fill, 62%) + 7%);
+    inline-size:.72rem; block-size:.22rem;
+    translate:-50% 55%;
+    border-radius:50%;
+    background:radial-gradient(50% 50% at 50% 50%, rgba(234,191,138,.95), rgba(234,191,138,0) 70%);
+    opacity:0;
+    animation:la-11-impact var(--dur) linear infinite;
+  }
+  @keyframes la-11-impact {
+    0%, 8% { opacity:0; scale:.4; }
+    12%, 58% { opacity:.85; scale:1; }
+    68%, 100% { opacity:0; scale:.4; }
+  }
+
+  /* glass sheen on the cup */
+  .la-11__sheen{
+    position:absolute; z-index:3;
+    left:.65rem; top:.85rem; bottom:.9rem; width:.95rem;
+    border-radius:999px; pointer-events:none;
+    background:linear-gradient(90deg, rgba(255,255,255,.55), rgba(255,255,255,.04));
+    opacity:.5;
+  }
+  /* porcelain rim lip */
+  .la-11__rim{
+    position:absolute; z-index:4;
+    left:.06rem; right:.06rem; top:-.16rem; height:.5rem;
+    border-radius:50%;
+    background:linear-gradient(180deg,#ffffff, #f2ede4);
+    box-shadow:0 1px 3px rgba(0,0,0,.28), inset 0 -1px 0 rgba(0,0,0,.1);
+  }
+  .la-11__handle {
+    position: absolute;
+    inset-inline-end: -1.35rem;
+    inset-block-start: .7rem;
+    z-index:0;
+    inline-size: 1.5rem;
+    block-size: 1.7rem;
+    border: .36rem solid var(--cup);
+    border-inline-start-color: transparent;
+    border-radius: 0 999px 999px 0;
+    filter: drop-shadow(2px 3px 3px rgba(0,0,0,.3));
+  }
+
+  /* --- saucer + shadow --- */
+  .la-11__shadow{
+    position:absolute; inset-block-end:-.45rem; left:1.7rem;
+    inline-size:7.2rem; block-size:.5rem;
+    background:radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.5), transparent 72%);
+    filter:blur(6px);
+  }
+  .la-11__saucer {
+    position: absolute;
+    inset-block-end: 0; left:1.8rem;
+    z-index:1;
+    inline-size: 7rem;
+    block-size: .6rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--saucer), color-mix(in oklab,var(--saucer) 70%,black));
+    box-shadow: inset 0 -2px 3px rgba(0,0,0,.18), inset 0 2px 2px rgba(255,255,255,.5);
+  }
+  .la-11__saucer::before{
+    content:''; position:absolute; left:50%; top:.08rem;
+    width:4.6rem; height:.42rem; translate:-50% 0;
+    border-radius:50%;
+    background:radial-gradient(50% 50% at 50% 50%, rgba(60,44,24,.35), transparent 75%);
+  }
+
+  /* --- steam: five wisps, varied size/drift/curl --- */
+  .la-11__steam {
+    position: absolute;
+    inset-block-end: 5.2rem;
+    z-index:3;
+    inline-size: .7rem;
+    block-size: 1rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(255,255,255,.55), transparent);
+    filter: blur(4px);
+    opacity: 0;
+    animation: la-11-steam var(--du,3s) ease-out infinite;
+    animation-delay: var(--d,0s);
+  }
+  @keyframes la-11-steam {
+    0% { opacity:0; translate:0 0; scale:.5 .5; rotate:0deg; }
+    25% { opacity:.5; }
+    60% { opacity:.18; }
+    100% { opacity:0; translate:var(--dx,0) -3.4rem; scale:calc(1.5 * var(--s,1)) calc(2.3 * var(--s,1)); rotate:var(--r,0deg); }
+  }
+
+  /* --- copy + track --- */
+  .la-11__copy { display: grid; gap: .45rem; }
+
+  .la-11__label {
+    margin: 0;
+    font-size: 1.32rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .la-11__ready { display: none; }
+
+  .la-11__meta {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.45);
+  }
+  .la-11__pct{
+    color: var(--acc);
+    font-variant-numeric: tabular-nums;
+    letter-spacing:.08em;
+  }
+
+  .la-11__track {
+    inline-size: 100%;
+    block-size: .35rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,.12);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.3);
+    overflow: hidden;
+  }
+
+  .la-11__fill {
+    display: block;
+    block-size: 100%;
+    border-radius: inherit;
+    inline-size: var(--la-11-fill, 62%);
+    background: linear-gradient(90deg, var(--acc), var(--ok));
+    box-shadow: 0 0 14px rgba(91,70,240,.65);
+    animation: la-11-fill var(--dur) ease-in-out infinite;
+  }
+
+  .la-11.is-ready .la-11__liquid,
+  .la-11.is-ready .la-11__fill,
+  .la-11.is-ready .la-11__drop,
+  .la-11.is-ready .la-11__impact,
+  .la-11.is-ready .la-11__stream,
+  .la-11.is-ready .la-11__arm {
+    animation: none;
+  }
+
+  .la-11.is-ready .la-11__stream { scale: 1 0; }
+
+  .la-11.is-ready .la-11__liquid { --la-11-fill: 88%; }
+
+  .la-11.is-ready .la-11__drop,
+  .la-11.is-ready .la-11__impact { opacity: 0; }
+
+  .la-11.is-ready .la-11__fill {
+    inline-size: 100%;
+    background: linear-gradient(90deg, var(--acc), var(--ok));
+  }
+
+  .la-11.is-ready .la-11__load { display: none; }
+
+  .la-11.is-ready .la-11__ready { display: inline; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .brew-splash{ display:none; }
+    .la-11 * { animation: none !important; transition: none !important; }
+    .la-11__liquid { --la-11-fill: 62%; }
+    .la-11__pour { scale: 1 1; }
+    .la-11__steam { opacity: .3; translate: var(--dx) -1.6rem; scale: 1.2 1.6; }
+  }
+
+  @media (forced-colors: active) {
+    .la-11__card { border: 1px solid CanvasText; }
+    .la-11__cup { border: 1px solid CanvasText; }
+    .la-11__fill { background: Highlight; }
+  }
+
   @media (prefers-reduced-motion:reduce){
     *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
     .reveal{ opacity:1; transform:none; filter:none; }
@@ -746,18 +1085,118 @@
 </style>
 </head>
 <body>
-  <a class="skip-link" href="#top" style="position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;" onfocus="this.style.cssText='position:fixed; left:18px; top:18px; width:auto; height:auto; padding:8px 12px; background:#fff; color:#000; z-index:9999; border-radius:6px; text-decoration:none;'" onblur="this.style.cssText='position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;'">Skip to main content</a>
-  <div class="float-social" aria-label="Social links">
-    <a href="https://www.instagram.com/willson_obito/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
-    </a>
-    <a href="https://wa.me/9779765829096" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.011 0C5.394 0 0 5.394 0 12.017c0 2.093.548 4.08 1.594 5.855L0 24l6.317-1.656a11.97 11.97 0 005.694 1.45h.005c6.618 0 12.011-5.394 12.011-12.017C24.028 5.394 18.634 0 12.011 0zm0 21.833h-.004a9.83 9.83 0 01-5.017-1.379l-.36-.213-3.73.978.996-3.638-.235-.373a9.83 9.83 0 01-1.51-5.191c0-5.438 4.428-9.86 9.87-9.86 2.638 0 5.117 1.027 6.982 2.892a9.797 9.797 0 012.884 6.968c0 5.438-4.428 9.86-9.876 9.86z"/><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#14102a"/></svg>
-    </a>
-    <a href="https://github.com/Willsonraiii" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12.03c0 5.05 3.29 9.33 7.85 10.84.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.87-1.35-3.87-1.35-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.41-5.26 5.69.41.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .31.2.66.79.55A10.53 10.53 0 0 0 23.5 12.03C23.5 5.73 18.27.5 12 .5z"/></svg>
-    </a>
+
+  <!-- BREW SPLASH — startup preloader (la-11 coffee brewing loader, adapted).
+       Plays once on page load: espresso pours, cup fills, then the splash
+       fades out and the site appears. Click anywhere to skip. -->
+  <div class="brew-splash" id="brewSplash" aria-hidden="true">
+    <div class="la-11" data-theme="light" data-state="loading">
+      <section class="la-11__card" role="status" aria-live="polite" aria-label="Brewing your experience">
+        <div class="la-11__stage" aria-hidden="true">
+          <span class="la-11__shadow"></span>
+
+          <!-- Willson — 3D vector barista, pouring (based on his BARISTA BOYS look) -->
+          <svg class="la-11__barista" viewBox="0 0 220 420" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">
+            <defs>
+              <radialGradient id="la-skin" cx="40%" cy="35%" r="75%"><stop offset="0%" stop-color="#f4c9a3"/><stop offset="100%" stop-color="#c4956a"/></radialGradient>
+              <radialGradient id="la-cap" cx="40%" cy="35%" r="75%"><stop offset="0%" stop-color="#3d2817"/><stop offset="100%" stop-color="#150c06"/></radialGradient>
+              <linearGradient id="la-shirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a2350"/><stop offset="100%" stop-color="#14102a"/></linearGradient>
+              <linearGradient id="la-pants" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#241d4a"/><stop offset="100%" stop-color="#100d24"/></linearGradient>
+              <linearGradient id="la-apron" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f9f3e8"/><stop offset="100%" stop-color="#e3d5ba"/></linearGradient>
+              <linearGradient id="la-steel" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f0f3f7"/><stop offset="50%" stop-color="#c2c9d4"/><stop offset="100%" stop-color="#8d95a3"/></linearGradient>
+              <linearGradient id="la-stream" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0a86a"/><stop offset="45%" stop-color="#4a2a15"/><stop offset="100%" stop-color="#241409"/></linearGradient>
+            </defs>
+
+            <!-- feet -->
+            <ellipse cx="86" cy="406" rx="19" ry="8" fill="#0a0716"/>
+            <ellipse cx="122" cy="406" rx="19" ry="8" fill="#0a0716"/>
+            <!-- legs -->
+            <rect x="72" y="332" width="22" height="80" rx="10" fill="url(#la-pants)"/>
+            <rect x="112" y="332" width="22" height="80" rx="10" fill="url(#la-pants)"/>
+            <!-- left arm on hip (behind torso) -->
+            <path d="M74 195 C52 205 46 236 56 253" fill="none" stroke="url(#la-shirt)" stroke-width="20" stroke-linecap="round"/>
+            <circle cx="59" cy="257" r="10" fill="url(#la-skin)"/>
+            <!-- torso -->
+            <path d="M64 190 Q64 168 80 166 L126 166 Q142 168 142 190 L152 340 L54 340 Z" fill="url(#la-shirt)"/>
+            <!-- apron -->
+            <path d="M76 200 L130 200 L138 340 L68 340 Z" fill="url(#la-apron)"/>
+            <path d="M76 200 L84 172 L98 200" fill="none" stroke="#c9b68f" stroke-width="5" stroke-linecap="round"/>
+            <path d="M130 200 L122 172 L108 200" fill="none" stroke="#c9b68f" stroke-width="5" stroke-linecap="round"/>
+            <rect x="90" y="262" width="28" height="18" rx="4" fill="none" stroke="#b8a37a" stroke-width="2"/>
+            <g fill="#6b4f2e" font-family="Inter, sans-serif" font-weight="800" text-anchor="middle">
+              <text x="103" y="240" font-size="10" letter-spacing="1.1">BARISTA</text>
+              <text x="103" y="252" font-size="10" letter-spacing="1.1">BOYS</text>
+            </g>
+            <!-- neck -->
+            <rect x="94" y="142" width="18" height="30" rx="7" fill="url(#la-skin)"/>
+            <!-- head -->
+            <circle cx="103" cy="112" r="40" fill="url(#la-skin)"/>
+            <circle cx="64" cy="114" r="7" fill="#c4956a"/>
+            <circle cx="142" cy="114" r="7" fill="#c4956a"/>
+            <!-- cap -->
+            <path d="M60 96 Q60 52 103 52 Q146 52 146 96 L146 102 L60 102 Z" fill="url(#la-cap)"/>
+            <ellipse cx="103" cy="102" rx="46" ry="7" fill="#120a05"/>
+            <circle cx="103" cy="52" r="6" fill="#c08552"/>
+            <!-- face -->
+            <path d="M84 98 Q88 92 92 98" stroke="#1a0f08" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <path d="M114 98 Q118 92 122 98" stroke="#1a0f08" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <circle cx="90" cy="113" r="3.6" fill="#1a0f08"/>
+            <circle cx="116" cy="113" r="3.6" fill="#1a0f08"/>
+            <path d="M92 127 Q103 135 114 127" stroke="#1a0f08" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+            <ellipse cx="82" cy="122" rx="5" ry="2.6" fill="#e8a37e" opacity=".55"/>
+            <ellipse cx="124" cy="122" rx="5" ry="2.6" fill="#e8a37e" opacity=".55"/>
+
+            <!-- right arm + steel pitcher, pouring (animated group) -->
+            <g class="la-11__arm">
+              <path d="M132 190 C166 178 188 158 196 140" fill="none" stroke="url(#la-shirt)" stroke-width="23" stroke-linecap="round"/>
+              <circle cx="197" cy="138" r="11" fill="url(#la-skin)"/>
+              <g class="la-11__pitcher" transform="rotate(16 188 122)">
+                <path d="M172 88 L200 88 L208 116 Q208 144 186 144 Q164 144 164 116 Z" fill="url(#la-steel)" stroke="#6f7683" stroke-width="2"/>
+                <path d="M198 92 Q214 84 218 97 Q209 105 198 102 Z" fill="url(#la-steel)" stroke="#6f7683" stroke-width="2"/>
+                <rect x="170" y="100" width="5" height="22" rx="2.5" fill="#ffffff" opacity=".55"/>
+              </g>
+            </g>
+            <!-- the pour: from pitcher spout down into the cup -->
+            <path class="la-11__stream" d="M212 100 C211 140 211 190 212 238" fill="none" stroke="url(#la-stream)" stroke-width="3.2" stroke-linecap="round"/>
+          </svg>
+
+          <span class="la-11__drop la-11__drop--1"></span>
+          <span class="la-11__drop la-11__drop--2"></span>
+          <span class="la-11__steam" style="--dx:-.5rem; --d:0s; --r:-6deg; --s:1; --du:2.9s; left:4.7rem"></span>
+          <span class="la-11__steam" style="--dx:.35rem; --d:.7s; --r:5deg; --s:.8; --du:3.3s; left:5.3rem"></span>
+          <span class="la-11__steam" style="--dx:-.1rem; --d:1.4s; --r:-4deg; --s:1.1; --du:3.6s; left:5.9rem"></span>
+          <span class="la-11__steam" style="--dx:.6rem; --d:2.1s; --r:7deg; --s:.75; --du:3.0s; left:6.3rem"></span>
+          <span class="la-11__steam" style="--dx:-.6rem; --d:2.8s; --r:-7deg; --s:.9; --du:3.4s; left:4.9rem"></span>
+
+          <span class="la-11__cup">
+            <span class="la-11__liquid">
+              <span class="la-11__impact"></span>
+              <span class="la-11__surface"></span>
+            </span>
+            <span class="la-11__sheen"></span>
+            <span class="la-11__rim"></span>
+            <span class="la-11__handle"></span>
+          </span>
+          <span class="la-11__saucer"></span>
+        </div>
+
+        <div class="la-11__copy">
+          <p class="la-11__label">
+            <span class="la-11__load">Brewing your experience</span>
+            <span class="la-11__ready">Served fresh — step in</span>
+          </p>
+          <p class="la-11__meta">Willson Rai <span aria-hidden="true">·</span> Head Barista <span aria-hidden="true">·</span> <span class="la-11__pct">0%</span></p>
+        </div>
+
+        <div class="la-11__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-valuetext="62 percent brewed">
+          <span class="la-11__fill"></span>
+        </div>
+      </section>
+    </div>
   </div>
+
+  <a class="skip-link" href="#top" style="position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;" onfocus="this.style.cssText='position:fixed; left:18px; top:18px; width:auto; height:auto; padding:8px 12px; background:#fff; color:#000; z-index:9999; border-radius:6px; text-decoration:none;'" onblur="this.style.cssText='position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;'">Skip to main content</a>
+
 
   <!-- Chat assistant -->
   <button class="chat-fab" id="chatToggle" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="chatPanel" aria-label="Open chat with Willson's assistant">
@@ -846,9 +1285,7 @@
       <nav class="nav__links" aria-label="Primary">
         <a href="#about">About</a>
         <a href="#experience">Experience</a>
-        <a href="#skills">Skills</a>
-        <a href="#gallery">Creative</a>
-        <a href="#freelancer">Freelancer</a>
+                <a href="#services">Services</a>
         <a href="#creds">Credentials</a>
       </nav>
       <a class="btn nav__cta" href="#contact">Get in touch</a>
@@ -860,35 +1297,13 @@
     <div class="nav__mobile" id="navMobile">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
-      <a href="#skills">Skills</a>
-      <a href="#gallery">Creative</a>
-      <a href="#freelancer">Freelancer</a>
+      <a href="#services">Services</a>
       <a href="#creds">Credentials</a>
       <a href="#contact" class="btn btn--solid">Get in touch</a>
     </div>
   </header>
 
   <!-- SKILL OVERLAYS -->
-  <div id="skill-overlay" class="skill-overlay" aria-hidden="true">
-    <button class="overlay-close" id="overlay-close" aria-label="Close overlay">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-    </button>
-    <div class="overlay-content wrap">
-      <div class="overlay-grid">
-        <div class="overlay-visual" id="overlay-visual">
-          <!-- 3D Art injected here -->
-        </div>
-        <div class="overlay-text">
-          <span class="kicker" id="overlay-kicker">Experience</span>
-          <h2 id="overlay-title">Skill Title</h2>
-          <div class="overlay-body" id="overlay-body">
-            <!-- Content injected here -->
-          </div>
-          <button class="btn btn--solid btn--lg" onclick="closeOverlay()">Back to Portfolio</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <main id="top" role="main">
 
@@ -1066,6 +1481,12 @@
             <p>Beyond the bar, I wear the hat of a creative freelancer — designing menus, crafting social media content, and building brand identities. Coffee and creativity flow through everything I do.</p>
           </div>
         </div>
+        <div class="stats reveal">
+          <div class="stat"><b>7+</b><span>Years behind the bar</span></div>
+          <div class="stat"><b>10K+</b><span>Cups crafted</span></div>
+          <div class="stat"><b>50+</b><span>Menu creations</span></div>
+          <div class="stat"><b>∞</b><span>Passion for the craft</span></div>
+        </div>
       </div>
     </section>
 
@@ -1240,121 +1661,191 @@
       </div>
     </section>
 
-    <!-- SKILLS -->
-    <section class="section" id="skills">
+
+
+    <!-- SERVICES — merged Creative + Freelance, gm-03 style stack decks -->
+    <section class="section section--alt" id="services">
       <div class="wrap">
         <div class="sec-head reveal">
-          <span class="kicker">What I do</span>
-          <h2>Brewed to perfection</h2>
-          <p>From the first crack of the roast to the final pour — every detail of the coffee experience, handled with care.</p>
+          <span class="kicker">Creative &amp; Freelance</span>
+          <h2>Craft for hire</h2>
+          <p>Alongside barista work, I bring a creative freelance skill set — visual, practical, and built for hospitality brands. Click any card to bring it to the front.</p>
         </div>
 
-        <div class="stats reveal">
-          <div class="stat"><b>7+</b><span>Years behind the bar</span></div>
-          <div class="stat"><b>10K+</b><span>Cups crafted</span></div>
-          <div class="stat"><b>50+</b><span>Menu creations</span></div>
-          <div class="stat"><b>∞</b><span>Passion for the craft</span></div>
-        </div>
+        <div class="cards-row">
+          <!-- DECK 1: THE CRAFT -->
+          <div class="deck-block">
+            <p class="deck-block__label">The Craft</p>
+            <div class="cards">
+              <span class="cards__blob cards__blob--1" aria-hidden="true"></span>
+              <span class="cards__blob cards__blob--2" aria-hidden="true"></span>
+              <span class="cards__blob cards__blob--3" aria-hidden="true"></span>
+              <div class="cards__fan cards__fan--4">
+                <article class="card" tabindex="0">
+                  <span class="card__tag">01</span>
+                  <div class="card__art">
+                    <svg viewBox="0 0 200 270" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="mnPage" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e8e2f5"/></linearGradient>
+                      </defs>
+                      <rect x="62" y="58" width="72" height="150" rx="10" fill="#fdf8f3"/>
+                      <rect x="98" y="58" width="72" height="150" rx="10" fill="url(#mnPage)"/>
+                      <line x1="98" y1="58" x2="98" y2="208" stroke="#1a1535" stroke-width="2" opacity=".25"/>
+                      <rect x="74" y="84" width="44" height="7" rx="3.5" fill="#9ca3af"/>
+                      <rect x="74" y="102" width="44" height="7" rx="3.5" fill="#c7d2fe"/>
+                      <rect x="74" y="120" width="32" height="7" rx="3.5" fill="#9ca3af"/>
+                      <rect x="110" y="84" width="44" height="7" rx="3.5" fill="#9ca3af"/>
+                      <rect x="110" y="102" width="44" height="7" rx="3.5" fill="#c7d2fe"/>
+                      <rect x="110" y="120" width="30" height="7" rx="3.5" fill="#9ca3af"/>
+                      <path d="M128 168 q4 -7 8 0 q4 7 8 0" stroke="#5b46f0" stroke-width="4" fill="none" stroke-linecap="round"/>
+                      <path d="M144 168 q4 -7 8 0 q4 7 8 0" stroke="#7b6bff" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <h3>Print-Ready Menu Design</h3>
+                  <p>Café and restaurant menus designed for both print and digital — balancing flavour, margin, and brand mood.</p>
+                </article>
 
-        <div class="features">
-          <div class="feature reveal d1" onclick="openOverlay('espresso')">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2c-1 2-3 3-3 6 0 2 1.5 3 3 3s3-1 3-3c0-3-2-4-3-6z" fill="#fff"/><path d="M7 14h10l-1 6a2 2 0 01-2 2h-4a2 2 0 01-2-2l-1-6z" fill="#fff" opacity=".7"/></svg></div>
-            <h3>Espresso Extraction</h3>
-            <p>Precision shots pulled at 9 bars, dialled in by dose, yield and time — every time.</p>
+                <article class="card" tabindex="0">
+                  <span class="card__tag">02</span>
+                  <div class="card__art">
+                    <svg viewBox="0 0 200 270" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="gdNib" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7b6bff"/><stop offset="100%" stop-color="#3a2bc4"/></linearGradient>
+                      </defs>
+                      <path d="M58 204 C100 94 152 94 172 152" stroke="#ffffff" stroke-width="4" fill="none" opacity=".5" stroke-dasharray="1 10" stroke-linecap="round"/>
+                      <circle cx="58" cy="204" r="7" fill="#ffffff"/>
+                      <circle cx="172" cy="152" r="7" fill="#ffffff"/>
+                      <path d="M118 50 l26 56 -12 12 -26 -56 z" fill="url(#gdNib)"/>
+                      <rect x="107" y="100" width="14" height="30" rx="4" fill="#5b46f0" transform="rotate(25 114 115)"/>
+                      <rect x="98" y="124" width="20" height="60" rx="7" fill="#ffffff" transform="rotate(25 108 154)"/>
+                      <circle cx="62" cy="84" r="20" fill="#7b6bff"/>
+                      <rect x="108" y="180" width="38" height="38" rx="7" fill="#ffffff" opacity=".92"/>
+                      <path d="M148 218 l28 -14 -28 -14 z" fill="#5b46f0"/>
+                    </svg>
+                  </div>
+                  <h3>Graphic Design</h3>
+                  <p>Promotional graphics, seasonal campaign visuals, and social media content built for hospitality branding.</p>
+                </article>
+
+                <article class="card" tabindex="0">
+                  <span class="card__tag">03</span>
+                  <div class="card__art">
+                    <svg viewBox="0 0 200 270" aria-hidden="true">
+                      <defs>
+                        <radialGradient id="phLens" cx="42%" cy="38%" r="75%"><stop offset="0%" stop-color="#7b6bff"/><stop offset="100%" stop-color="#3a2bc4"/></radialGradient>
+                      </defs>
+                      <rect x="34" y="92" width="132" height="92" rx="18" fill="#ffffff"/>
+                      <rect x="70" y="76" width="60" height="22" rx="8" fill="#5b46f0"/>
+                      <circle cx="100" cy="138" r="30" fill="url(#phLens)"/>
+                      <circle cx="100" cy="138" r="14" fill="#1a1535" opacity=".85"/>
+                      <circle cx="87" cy="125" r="5" fill="#ffffff" opacity=".9"/>
+                      <circle cx="150" cy="108" r="6" fill="#fbbf24"/>
+                    </svg>
+                  </div>
+                  <h3>Photography</h3>
+                  <p>Culinary and beverage photography — styled, lit, and shot to make every dish and drink look as good as it tastes.</p>
+                </article>
+
+                <article class="card" tabindex="0">
+                  <span class="card__tag">04</span>
+                  <div class="card__art">
+                    <svg viewBox="0 0 200 270" aria-hidden="true">
+                      <rect x="40" y="76" width="120" height="100" rx="16" fill="#ffffff"/>
+                      <path d="M86 106 l48 20 -48 20 z" fill="#5b46f0"/>
+                      <rect x="52" y="196" width="96" height="8" rx="4" fill="#d1d5db"/>
+                      <rect x="52" y="196" width="34" height="8" rx="4" fill="#5b46f0"/>
+                      <circle cx="86" cy="200" r="7" fill="#ffffff" stroke="#5b46f0" stroke-width="3"/>
+                    </svg>
+                  </div>
+                  <h3>Videography</h3>
+                  <p>Short-form video for social media — behind-the-bar clips, pour-overs, and brand storytelling content.</p>
+                </article>
+              </div>
+            </div>
           </div>
-          <div class="feature reveal d2" onclick="openOverlay('latte')">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3c-3 0-5 2-5 5 0 2 1 3 2 4-2 1-3 2-3 4 0 3 2 5 6 5s6-2 6-5c0-2-1-3-3-4 1-1 2-2 2-4 0-3-2-5-5-5z" fill="#fff"/></svg></div>
-            <h3>Latte Art</h3>
-            <p>From rosettas to swans, poured with a steady hand and a pitcher full of microfoam.</p>
-          </div>
-          <div class="feature reveal d3" onclick="openOverlay('manual')">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h10" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>
-            <h3>Manual Brewing</h3>
-            <p>V60, AeroPress, Chemex — slow coffee that honours the bean and the brewer.</p>
-          </div>
-          <div class="feature reveal d1" onclick="openOverlay('menu')">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 4h14v3a4 4 0 01-4 4h-6a4 4 0 01-4-4V4z" fill="#fff"/><path d="M9 11v8a2 2 0 002 2h2a2 2 0 002-2v-8" stroke="#fff" stroke-width="1.6" fill="none"/></svg></div>
-            <h3>Café Menu Design</h3>
-            <p>Menus that balance flavour, margin and mood — crafted to match the room.</p>
-          </div>
-          <div class="feature reveal d2" onclick="openOverlay('training')">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="#fff"/><path d="M5 21c0-4 3-7 7-7s7 3 7 7" fill="#fff" opacity=".7"/></svg></div>
-            <h3>Barista Training</h3>
-            <p>Mentoring the next generation of pour-over pros, from tamp to latte art.</p>
-          </div>
-          <div class="feature reveal d3" onclick="openOverlay('photo')">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" fill="#fff"/><path d="M8 7l1.5-3h5L16 7" stroke="#fff" stroke-width="1.6" fill="none"/><circle cx="12" cy="13" r="3.5" fill="#5b46f0"/></svg></div>
-            <h3>Culinary Photography</h3>
-            <p>Making every cup look as good as it tastes — styled, lit and shot in-house.</p>
+
+          <!-- DECK 2: HIRE ME -->
+          <div class="deck-block">
+            <p class="deck-block__label">Hire Me</p>
+            <div class="cards">
+              <span class="cards__blob cards__blob--1" aria-hidden="true"></span>
+              <span class="cards__blob cards__blob--2" aria-hidden="true"></span>
+              <span class="cards__blob cards__blob--3" aria-hidden="true"></span>
+              <div class="cards__fan">
+                <article class="card" tabindex="0">
+                  <span class="card__tag">01</span>
+                  <div class="card__art">
+                    <svg viewBox="0 0 200 270" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="cnBoard" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e5e7eb"/></linearGradient>
+                        <radialGradient id="cnBean" cx="38%" cy="30%" r="80%"><stop offset="0%" stop-color="#8b5a2b"/><stop offset="100%" stop-color="#3d2817"/></radialGradient>
+                      </defs>
+                      <rect x="62" y="96" width="92" height="122" rx="10" fill="url(#cnBoard)"/>
+                      <rect x="50" y="78" width="116" height="30" rx="9" fill="#5b46f0"/>
+                      <rect x="88" y="70" width="40" height="16" rx="5" fill="#3a2bc4"/>
+                      <rect x="76" y="122" width="64" height="7" rx="3.5" fill="#9ca3af"/>
+                      <rect x="76" y="140" width="64" height="7" rx="3.5" fill="#c7d2fe"/>
+                      <rect x="76" y="158" width="44" height="7" rx="3.5" fill="#9ca3af"/>
+                      <path d="M80 190 l12 12 l26 -28" stroke="#5b46f0" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                      <ellipse cx="152" cy="232" rx="20" ry="24" fill="url(#cnBean)"/>
+                      <path d="M152 210 q-5 22 0 44" stroke="#1a0f08" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    </svg>
+                  </div>
+                  <h3>Barista Consulting</h3>
+                  <p>Menu development, barista training programs, equipment calibration, and workflow optimization for café startups and established venues.</p>
+                </article>
+
+                <article class="card" tabindex="0">
+                  <span class="card__tag">02</span>
+                  <div class="card__art">
+                    <svg viewBox="0 0 200 270" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="trCap" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fdf8f3"/><stop offset="100%" stop-color="#e8ddc8"/></linearGradient>
+                        <radialGradient id="trCoffee" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#8b5a2b"/><stop offset="100%" stop-color="#3d2817"/></radialGradient>
+                      </defs>
+                      <polygon points="40,105 100,72 160,105 100,120" fill="#5b46f0"/>
+                      <rect x="80" y="112" width="40" height="16" rx="5" fill="#3a2bc4"/>
+                      <path d="M160 105 v20 q0 8 10 8" stroke="#5b46f0" stroke-width="5" fill="none" stroke-linecap="round"/>
+                      <circle cx="170" cy="135" r="6" fill="#fbbf24"/>
+                      <path d="M50 150 h100 v-15 a50 25 0 0 1 50 -25 a50 25 0 0 1 50 25 v15 z" fill="#ffffff"/>
+                      <path d="M155 150 q25 0 25 25 q0 25 -25 25" stroke="#ffffff" stroke-width="12" fill="none" stroke-linecap="round"/>
+                      <ellipse cx="100" cy="150" rx="50" ry="12" fill="#fff"/>
+                      <ellipse cx="100" cy="148" rx="50" ry="10" fill="url(#trCoffee)"/>
+                      <path d="M100 132 q-18 0 -26 8 q-5 8 3 12 q14 6 23 14 q9 -8 23 -14 q8 -4 3 -12 q-8 -8 -26 -8 z" fill="#fff" opacity=".88"/>
+                    </svg>
+                  </div>
+                  <h3>Barista Training</h3>
+                  <p>One-on-one or group training for aspiring baristas — espresso theory, latte art, manual brewing, and customer interaction.</p>
+                </article>
+
+                <article class="card" tabindex="0">
+                  <span class="card__tag">03</span>
+                  <div class="card__art">
+                    <svg viewBox="0 0 200 270" aria-hidden="true">
+                      <defs>
+                        <radialGradient id="evCoffee" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#8b5a2b"/><stop offset="100%" stop-color="#3d2817"/></radialGradient>
+                        <path id="evStar" d="M0 -14 c2 6 6 10 12 12 c-6 2 -10 6 -12 12 c-2 -6 -6 -10 -12 -12 c6 -2 10 -6 12 -12" fill="#fbbf24"/>
+                      </defs>
+                      <path d="M38 130 Q38 220 100 220 Q162 220 162 130 Z" fill="#ffffff"/>
+                      <path d="M160 145 Q190 145 190 170 Q190 195 160 195" stroke="#ffffff" stroke-width="13" fill="none" stroke-linecap="round"/>
+                      <ellipse cx="100" cy="130" rx="62" ry="13" fill="#fff"/>
+                      <ellipse cx="100" cy="128" rx="62" ry="11" fill="url(#evCoffee)"/>
+                      <use href="#evStar" transform="translate(64 62)"/>
+                      <use href="#evStar" transform="translate(134 48) scale(.8)"/>
+                      <use href="#evStar" transform="translate(104 84) scale(.55)"/>
+                    </svg>
+                  </div>
+                  <h3>Guest Barista &amp; Events</h3>
+                  <p>Pop-up coffee experiences, hospitality events, brand activations, and cupping workshops.</p>
+                </article>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CREATIVE EXPERIENCE -->
-    <section class="section section--alt" id="gallery">
-      <div class="wrap">
-        <div class="sec-head reveal">
-          <span class="kicker">Beyond the Bar</span>
-          <h2>Creative Experience</h2>
-          <p>Alongside barista work, I bring a creative freelance skill set — visual, practical, and built for hospitality brands.</p>
-        </div>
-        <div class="features">
-          <div class="feature reveal d1">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 4h14v3a4 4 0 01-4 4h-6a4 4 0 01-4-4V4z" fill="#fff"/><path d="M9 11v8a2 2 0 002 2h2a2 2 0 002-2v-8" stroke="#fff" stroke-width="1.6" fill="none"/></svg></div>
-            <h3>Print-Ready Menu Design</h3>
-            <p>Café and restaurant menus designed for both print and digital — balancing flavour, margin, and brand mood.</p>
-          </div>
-          <div class="feature reveal d2">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" fill="#fff" opacity=".9"/><circle cx="12" cy="12" r="4" fill="#5b46f0"/></svg></div>
-            <h3>Graphic Design</h3>
-            <p>Promotional graphics, seasonal campaign visuals, and social media content built for hospitality branding.</p>
-          </div>
-          <div class="feature reveal d3">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2" fill="#fff"/><path d="M8 7l1.5-3h5L16 7" stroke="#fff" stroke-width="1.6" fill="none"/><circle cx="12" cy="13" r="3.5" fill="#5b46f0"/></svg></div>
-            <h3>Photography</h3>
-            <p>Culinary and beverage photography — styled, lit, and shot to make every dish and drink look as good as it tastes.</p>
-          </div>
-          <div class="feature reveal d1">
-            <div class="feature__ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6a2 2 0 012-2h9a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6z" fill="#fff"/><path d="M21 9l-5 3 5 3V9z" fill="#fff" opacity=".7"/></svg></div>
-            <h3>Videography</h3>
-            <p>Short-form video for social media — behind-the-bar clips, pour-overs, and brand storytelling content.</p>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- FREELANCER -->
-    <section class="section" id="freelancer">
-      <div class="wrap">
-        <div class="sec-head reveal">
-          <span class="kicker">Available for Hire</span>
-          <h2>Freelance Services</h2>
-        </div>
-        <div class="freelance-list">
-          <div class="freelance-item reveal d1">
-            <span class="freelance-item__num">01</span>
-            <div><h3>Barista Consulting</h3><p>Menu development, barista training programs, equipment calibration, and workflow optimization for café startups and established venues.</p></div>
-          </div>
-          <div class="freelance-item reveal d2">
-            <span class="freelance-item__num">02</span>
-            <div><h3>Café & Menu Design</h3><p>Beautiful, print-ready menus and digital assets tailored to your brand's identity using Canva and layout design principles.</p></div>
-          </div>
-          <div class="freelance-item reveal d3">
-            <span class="freelance-item__num">03</span>
-            <div><h3>Social Media Content</h3><p>Eye-catching promotional graphics, seasonal campaigns, and consistent visual branding for restaurant and café social channels.</p></div>
-          </div>
-          <div class="freelance-item reveal d4">
-            <span class="freelance-item__num">04</span>
-            <div><h3>Barista Training Sessions</h3><p>One-on-one or group training for aspiring baristas — covering espresso theory, latte art, manual brewing, and customer interaction.</p></div>
-          </div>
-          <div class="freelance-item reveal d5">
-            <span class="freelance-item__num">05</span>
-            <div><h3>Guest Barista & Events</h3><p>Available for pop-up coffee experiences, hospitality events, brand activations, and cupping workshops.</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- CREDENTIALS -->
     <section class="section section--alt" id="creds">
@@ -1426,10 +1917,21 @@
       </a>
       <nav class="footer__links" aria-label="Footer">
         <a href="#craft">The craft</a>
-        <a href="#skills">Skills</a>
+        <a href="#services">Services</a>
         <a href="#contact">Contact</a>
-        <a href="/cdn-cgi/l/email-protection#66140315130b0326110f0a0a15090814070f4805090b480816">Email</a>
+        <a href="/cdn-cgi/l/email-protection#295b4c5a5c444c695e4045455a46475b4840074a4644074759">Email</a>
       </nav>
+      <div class="footer__socials" aria-label="Social links">
+        <a href="https://www.instagram.com/willson_obito/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://wa.me/9779765829096" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.011 0C5.394 0 0 5.394 0 12.017c0 2.093.548 4.08 1.594 5.855L0 24l6.317-1.656a11.97 11.97 0 005.694 1.45h.005c6.618 0 12.011-5.394 12.011-12.017C24.028 5.394 18.634 0 12.011 0zm0 21.833h-.004a9.83 9.83 0 01-5.017-1.379l-.36-.213-3.73.978.996-3.638-.235-.373a9.83 9.83 0 01-1.51-5.191c0-5.438 4.428-9.86 9.87-9.86 2.638 0 5.117 1.027 6.982 2.892a9.797 9.797 0 012.884 6.968c0 5.438-4.428 9.86-9.876 9.86z"/><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#14102a"/></svg>
+        </a>
+        <a href="https://github.com/Willsonraiii" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12.03c0 5.05 3.29 9.33 7.85 10.84.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.1-3.2.7-3.87-1.35-3.87-1.35-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.77.11 3.06.74.8 1.19 1.83 1.19 3.09 0 4.43-2.7 5.41-5.26 5.69.41.36.78 1.08.78 2.17 0 1.57-.01 2.83-.01 3.22 0 .31.2.66.79.55A10.53 10.53 0 0 0 23.5 12.03C23.5 5.73 18.27.5 12 .5z"/></svg>
+        </a>
+      </div>
       <small>© <span id="yr"></span> Willson Rai · Lalitpur, Nepal · Crafting since 2017.</small>
     </div>
   </footer>
@@ -1472,62 +1974,6 @@
     });
   }
 
-  const skillData = {
-    "espresso": {
-      title: "Espresso Extraction",
-      body: "Precision shots pulled at 9 bars of pressure. Willson focuses on the intricate variables of coffee science: dose, yield, and extraction time. Every bean is dialed in to highlight its unique flavor profile, from bright acidity to deep chocolate notes.",
-      visual: `<svg viewBox="0 0 200 200"><defs><radialGradient id="g-coffee-nat" cx="40%" cy="35%" r="80%"><stop offset="0%" stop-color="#5a3a1a"/><stop offset="100%" stop-color="#1a0f08"/></radialGradient></defs><path d="M50 40 Q50 30 60 30 L140 30 Q150 30 150 40 L140 160 Q140 180 100 180 Q60 180 60 160 Z" fill="url(#g-coffee-nat)"/><path d="M60 40 L140 40 L130 100 L70 100 Z" fill="#ffffff" opacity="0.1"/><rect x="45" y="30" width="110" height="8" rx="4" fill="#d1d5db"/></svg>`
-    },
-    "latte": {
-      title: "Latte Art",
-      body: "Poured with a steady hand and silky microfoam. From classic rosettas and tulips to advanced free-pour designs like swans and phoenixes. This is where barista technique meets creative expression.",
-      visual: `<svg viewBox="0 0 200 200"><defs><radialGradient id="g-cup-nat" cx="40%" cy="35%" r="80%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e5e7eb"/></radialGradient><radialGradient id="g-liquid-nat" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#8b5a2b"/><stop offset="100%" stop-color="#5a3a1a"/></radialGradient></defs><path d="M40 80 Q40 160 100 160 Q160 160 160 80 Z" fill="url(#g-cup-nat)"/><ellipse cx="100" cy="80" rx="60" ry="15" fill="#ffffff"/><ellipse cx="100" cy="78" rx="55" ry="12" fill="url(#g-liquid-nat)"/><path d="M100 70 Q80 68 75 75 Q72 82 80 85 Q95 90 100 100 Q105 90 120 85 Q128 82 125 75 Q120 68 100 70 Z" fill="#ffffff" opacity="0.9"/></svg>`
-    },
-    "manual": {
-      title: "Manual Brewing",
-      body: "Honoring the slower side of coffee. Specializing in V60, AeroPress, and Chemex. By controlling temperature, agitation, and pour rate, Willson extracts the clear, tea-like complexities that single-origin beans are famous for.",
-      visual: `<svg viewBox="0 0 200 200"><defs><linearGradient id="g-manual" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00ffcc"/><stop offset="100%" stop-color="#0066ff"/></linearGradient></defs><circle cx="100" cy="100" r="80" fill="url(#g-manual)" opacity="0.2"/><path d="M60 50 L140 50 L100 150 Z" fill="url(#g-manual)"/><rect x="95" y="150" width="10" height="20" fill="url(#g-manual)"/></svg>`
-    },
-    "menu": {
-      title: "Menu Design",
-      body: "Creating cohesive beverage programs that balance seasonal trends with commercial viability. From signature syrups to high-volume workflow optimization, Willson designs menus that please both the palate and the POS.",
-      visual: `<svg viewBox="0 0 200 200"><defs><linearGradient id="g-menu" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ccff00"/><stop offset="100%" stop-color="#00f2ff"/></linearGradient></defs><circle cx="100" cy="100" r="80" fill="url(#g-menu)" opacity="0.2"/><rect x="60" y="50" width="80" height="100" rx="5" fill="url(#g-menu)"/><line x1="75" y1="75" x2="125" y2="75" stroke="#fff" stroke-width="4"/><line x1="75" y1="100" x2="125" y2="100" stroke="#fff" stroke-width="4"/></svg>`
-    },
-    "training": {
-      title: "Barista Training",
-      body: "Empowering the next generation of specialty coffee professionals. Willson provides comprehensive training on machine maintenance, sensor skills, milk texture, and customer service excellence.",
-      visual: `<svg viewBox="0 0 200 200"><defs><linearGradient id="g-training" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ff9900"/><stop offset="100%" stop-color="#ff0080"/></linearGradient></defs><circle cx="100" cy="100" r="80" fill="url(#g-training)" opacity="0.2"/><circle cx="100" cy="85" r="25" fill="url(#g-training)"/><path d="M60 150 Q60 120 100 120 Q140 120 140 150" fill="url(#g-training)"/></svg>`
-    },
-    "photo": {
-      title: "Culinary Photo",
-      body: "Capturing the beauty of the brew. With an eye for lighting and composition, Willson documents the hospitality experience through high-end digital photography, perfect for social marketing and brand identity.",
-      visual: `<svg viewBox="0 0 200 200"><defs><linearGradient id="g-photo" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7000ff"/><stop offset="100%" stop-color="#00f2ff"/></linearGradient></defs><circle cx="100" cy="100" r="80" fill="url(#g-photo)" opacity="0.2"/><rect x="50" y="70" width="100" height="70" rx="5" fill="url(#g-photo)"/><circle cx="100" cy="105" r="20" stroke="#fff" stroke-width="4" fill="none"/></svg>`
-    }
-  };
-
-  function openOverlay(key) {
-    const data = skillData[key];
-    if (!data) return;
-    document.getElementById('overlay-title').textContent = data.title;
-    document.getElementById('overlay-body').innerHTML = `<p>${data.body}</p>`;
-    document.getElementById('overlay-visual').innerHTML = data.visual;
-    document.getElementById('skill-overlay').classList.add('active');
-    document.getElementById('skill-overlay').setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeOverlay() {
-    document.getElementById('skill-overlay').classList.remove('active');
-    document.getElementById('skill-overlay').setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-
-  document.getElementById('overlay-close').addEventListener('click', closeOverlay);
-  
-  // Close on ESC
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeOverlay();
-  });
 </script>
 
 <script>
@@ -1542,7 +1988,7 @@
     { keys: ['what do you do','what does he do','job','role','who are you','about him','about you'],
       a: "I'm Willson Rai — Head Barista and creative freelancer based in Lalitpur, Kathmandu Valley, Nepal, with 7+ years in specialty coffee. Outside the bar I design menus, create social content, and build brand identities." },
     { keys: ['skill','skills','good at','specialt','latte art','espresso'],
-      a: 'Core skills: espresso extraction, latte art, menu design, brand identity, and social media content creation. Check the "Skills" section on the page for the full breakdown.' },
+      a: 'Core skills: espresso extraction, latte art, menu design, brand identity, and social media content creation. Check the "Services" section on the page for the full breakdown.' },
     { keys: ['contact','reach','email','whatsapp','phone','hire','hire him','get in touch'],
       a: 'Best way to reach him is WhatsApp: <a href="https://wa.me/9779765829096" target="_blank" rel="noopener">wa.me/9779765829096</a> — or use the "Get in touch" button up top.' },
     { keys: ['where','location','based','live','city','country'],
@@ -1657,39 +2103,105 @@
 </script>
 <script>
   (function(){
-    var deck = document.querySelector('.cards');
-    if (!deck) return;
-    var cards = Array.prototype.slice.call(deck.querySelectorAll('.card'));
-    if (!cards.length) return;
+    var decks = Array.prototype.slice.call(document.querySelectorAll('.cards'));
+    if (!decks.length) return;
 
-    var order = cards.slice(); // order[0] is always the front card
+    decks.forEach(function(deck){
+      var cards = Array.prototype.slice.call(deck.querySelectorAll('.card'));
+      if (!cards.length) return;
 
-    function applyOrder(){
-      order.forEach(function(card, i){
-        card.style.setProperty('--i', i);
-        card.setAttribute('aria-current', i === 0 ? 'true' : 'false');
-      });
-    }
-    applyOrder();
+      var order = cards.slice(); // order[0] is always the front card
 
-    function bringToFront(card){
-      if (order[0] === card) return; // already front, nothing to do
-      order = [card].concat(order.filter(function(c){ return c !== card; }));
+      function applyOrder(){
+        order.forEach(function(card, i){
+          card.style.setProperty('--i', i);
+          card.setAttribute('aria-current', i === 0 ? 'true' : 'false');
+        });
+      }
       applyOrder();
-    }
 
-    cards.forEach(function(card){
-      card.addEventListener('click', function(){
-        bringToFront(card);
-      });
-      card.addEventListener('keydown', function(e){
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
-          e.preventDefault();
+      function bringToFront(card){
+        if (order[0] === card) return; // already front, nothing to do
+        order = [card].concat(order.filter(function(c){ return c !== card; }));
+        applyOrder();
+      }
+
+      cards.forEach(function(card){
+        card.addEventListener('click', function(){
           bringToFront(card);
-        }
+        });
+        card.addEventListener('keydown', function(e){
+          if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar'){
+            e.preventDefault();
+            bringToFront(card);
+          }
+        });
       });
     });
   })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2ce78d9ee747b80',t:'MTc4NzAzMDQ1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+<script>
+  // BREW SPLASH — startup preloader timeline.
+  // One brew cycle (~2.6s), "served" beat, then the splash fades out.
+  // Click anywhere on it to skip straight to the fade.
+  (function(){
+    var splash = document.getElementById('brewSplash');
+    if (!splash) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      splash.remove();
+      return;
+    }
+
+    var root = splash.querySelector('.la-11');
+    var bar = splash.querySelector('[role="progressbar"]');
+    var pctEl = splash.querySelector('.la-11__pct');
+    var liquid = splash.querySelector('.la-11__liquid');
+    var done = false;
+    var raf;
+    document.documentElement.style.overflow = 'hidden';
+
+    // live brew percentage — reads the animated @property each frame
+    if (liquid && pctEl){
+      (function tick(){
+        if (!splash.isConnected || done) return;
+        var v = getComputedStyle(liquid).getPropertyValue('--la-11-fill').trim();
+        var num = parseFloat(v);
+        if (!isNaN(num)) pctEl.textContent = Math.round(num) + '%';
+        raf = requestAnimationFrame(tick);
+      })();
+    }
+
+    function markReady(){
+      if (done || !root) return;
+      done = true;
+      if (pctEl) pctEl.textContent = '100%';
+      root.classList.add('is-ready');
+      root.dataset.state = 'ready';
+      bar.setAttribute('aria-valuenow', '100');
+      bar.setAttribute('aria-valuetext', 'Brew complete');
+    }
+
+    function fadeOut(){
+      if (!splash.isConnected) return;
+      if (raf) cancelAnimationFrame(raf);
+      splash.classList.add('brew-splash--out');
+      setTimeout(function(){
+        if (splash.isConnected) splash.remove();
+        document.documentElement.style.overflow = '';
+      }, 620);
+    }
+
+    var tReady = setTimeout(markReady, 1700);   // cup full -> "Served fresh"
+    var tFade  = setTimeout(fadeOut,  2800);   // fade into the site
+    var tKill  = setTimeout(fadeOut,  8000);   // absolute failsafe
+
+    splash.addEventListener('click', function(){
+      clearTimeout(tReady); clearTimeout(tFade); clearTimeout(tKill);
+      markReady();
+      fadeOut();
+    });
+  })();
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2cf55e54ab7b01a',t:'MTc4NzAzOTUwOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

@@ -292,6 +292,24 @@
       background:var(--ink); color:var(--surface);
     }
 
+    /* related follow-up question chips */
+    .cb-03__sugg{
+      display:flex; flex-wrap:wrap; gap:.4rem;
+      margin-block-start:.55rem;
+      animation: cb-03-pop .45s cubic-bezier(.16,1,.3,1) backwards;
+    }
+    .cb-03__sugg-chip{
+      padding:.35rem .75rem; border-radius:999px; cursor:pointer;
+      border:1px solid var(--line); background:var(--surface); color:var(--muted);
+      font:inherit; font-size:.78rem; font-weight:500;
+      transition:transform .2s cubic-bezier(.16,1,.3,1), color .2s, border-color .2s;
+    }
+    .cb-03__sugg-chip:hover{
+      transform:translateY(-2px); color:var(--ink);
+      border-color: rgba(16,163,127,.45);
+    }
+    .cb-03__sugg-chip:focus-visible{ outline:2px solid var(--ring); outline-offset:2px; }
+
     /* actions */
     .cb-03__acts { display: flex; gap: .15rem; }
 
@@ -2774,7 +2792,7 @@
         <a href="#craft">The craft</a>
         <a href="#services">Services</a>
         <a href="#contact">Contact</a>
-        <a href="/cdn-cgi/l/email-protection#f3819680869e96b3849a9f9f809c9d81929add909c9edd9d83">Email</a>
+        <a href="/cdn-cgi/l/email-protection#bfcddacccad2daffc8d6d3d3ccd0d1cdded691dcd0d291d1cf">Email</a>
       </nav>
       <div class="footer__socials" aria-label="Social links">
         <a href="https://www.instagram.com/willson_obito/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
@@ -2872,69 +2890,92 @@
   var KB = [
     { keys: ['hi','hello','hey','namaste','yo','good morning','good afternoon','good evening'],
       a: ["Hey there! ☕ Lovely to see you at Willson's corner of the internet.",
-          "Ask me about his barista journey, his services, some real coffee wisdom, or how to reach him — what's on your mind?"] },
+          "Ask me about his barista journey, his services, some real coffee wisdom, or how to reach him — what's on your mind?"],
+      suggest: ["What does Willson do?", "How can I hire him?", "What are his skills?"] },
     { keys: ['who are you','who is willson','what does he do','what do you do','about him','about willson','about you','job','role','profession','barista'],
       a: ["Willson Rai is a Head Barista and creative freelancer from Lalitpur, Kathmandu Valley — 7+ years deep in specialty coffee.",
-          "Beyond the bar, he designs menus, crafts social content, and builds brand identities for cafés. The About section tells the full story."] },
+          "Beyond the bar, he designs menus, crafts social content, and builds brand identities for cafés. The About section tells the full story."],
+      suggest: ["What are his skills?", "Where is he based?", "How can I hire him?"] },
     { keys: ['skill','skills','good at','specialize','specialty','strong at','expertise','talents','what can he do'],
       a: ["Willson's toolkit: espresso extraction, latte art, manual brewing, menu design, branding, photography, and barista training.",
-          "He's also a natural teacher — ask me about his training sessions if you're curious."] },
+          "He's also a natural teacher — ask me about his training sessions if you're curious."],
+      suggest: ["Does he teach baristas?", "What services does he offer?", "How can I contact him?"] },
     { keys: ['experience','years','history','worked','career','background','timeline'],
       a: ["He has 7+ years in coffee and hospitality — from pulling his first shots to leading teams and training baristas.",
-          "The Experience section walks through every stop, café by café."] },
+          "The Experience section walks through every stop, café by café."],
+      suggest: ["Which cafés has he worked at?", "What skills does he have?", "Give me his CV"] },
     { keys: ['services','service','freelance','freelancer','design work','menu design','graphic','photography','videography','branding','brand identity','offerings','what does he offer'],
       a: ["As a freelancer he offers menu design, social media content, branding, photography, barista consulting, training, and guest-barista events.",
-          "The Services section has two decks — The Craft and Hire Me — click any card to explore."] },
+          "The Services section has two decks — The Craft and Hire Me — click any card to explore."],
+      suggest: ["How can I book him?", "Does he design menus?", "What are his prices?"] },
     { keys: ['hire','book','booking','price','prices','cost','fee','rate','rates','charge','charges','available','availability','quote','how much'],
       a: ["He takes on café collaborations, menu consulting, training, and events — every project is quoted individually.",
           "Tap below and tell him your idea — he'll get back with the details."],
-      action: { type: 'wa', label: 'Chat on WhatsApp', href: 'https://wa.me/9779765829096' } },
+      action: { type: 'wa', label: 'Chat on WhatsApp', href: 'https://wa.me/9779765829096' },
+      suggest: ["What services does he offer?", "Give me his CV", "Where is he based?"] },
     { keys: ['contact','reach','email','whatsapp','phone','number','call','message','get in touch'],
       a: ["Tap below to reach Willson directly — it's the fastest way."],
-      action: { type: 'wa', label: 'Chat on WhatsApp', href: 'https://wa.me/9779765829096' } },
+      action: { type: 'wa', label: 'Chat on WhatsApp', href: 'https://wa.me/9779765829096' },
+      suggest: ["How can I hire him?", "Where is he based?", "Give me his CV"] },
     { keys: ['where','location','based','live','city','address','kathmandu','lalitpur','nepal','country'],
       a: ["Willson is based in Lalitpur, in the Kathmandu Valley, Nepal.",
-          "Most of his work happens around Kathmandu and Lalitpur — and events can travel."] },
+          "Most of his work happens around Kathmandu and Lalitpur — and events can travel."],
+      suggest: ["Does he travel for events?", "How can I contact him?", "What does he do?"] },
     { keys: ['cv','resume','download','curriculum vitae','pdf'],
       a: ["One tap and his full CV is open on your screen."],
-      action: { type: 'cv', label: 'View CV', href: 'cv.html' } },
+      action: { type: 'cv', label: 'View CV', href: 'cv.html' },
+      suggest: ["What are his skills?", "How can I hire him?", "Tell me about his experience"] },
     { keys: ['instagram','github','social','facebook','tiktok','twitter','youtube','follow','links'],
       a: ["Tap below to follow Willson on Instagram."],
-      action: { type: 'ig', label: 'Follow on Instagram', href: 'https://www.instagram.com/willson_obito/' } },
+      action: { type: 'ig', label: 'Follow on Instagram', href: 'https://www.instagram.com/willson_obito/' },
+      suggest: ["How can I contact him?", "Give me his CV", "What does he do?"] },
     { keys: ['espresso','shot','shots','extraction','crema','dial in','dialing','9 bar','grinder'],
       a: ["Espresso wisdom from the bar: aim for roughly a 1:2 ratio in about 25–30 seconds at 9 bars — then trust your taste buds over the timer.",
-          "Willson dials in by dose, yield, and time, then adjusts for the roast. His training sessions cover this in depth."] },
+          "Willson dials in by dose, yield, and time, then adjusts for the roast. His training sessions cover this in depth."],
+      suggest: ["How do I steam milk properly?", "What's a good pour-over ratio?", "Does Willson teach this?"] },
     { keys: ['latte art','rosetta','tulip','heart','pour','microfoam','art'],
       a: ["Latte art is 80% milk texture: silky, glossy microfoam with no big bubbles — the pour simply draws with it.",
-          "Willson pours everything from hearts to swans, and he teaches it step by step in his training sessions."] },
+          "Willson pours everything from hearts to swans, and he teaches it step by step in his training sessions."],
+      suggest: ["How do I steam milk properly?", "Does Willson teach latte art?", "What's the best milk for art?"] },
     { keys: ['v60','pour over','pourover','aeropress','chemex','french press','brew','brewing','filter','immersion','method'],
       a: ["For pour-overs, Willson's rule of thumb: 1:15 to 1:16 coffee-to-water, water just off the boil, and a slow, even pour.",
-          "V60 for clarity, AeroPress for body, Chemex for clean cups — each bean picks its own method."] },
+          "V60 for clarity, AeroPress for body, Chemex for clean cups — each bean picks its own method."],
+      suggest: ["What about espresso?", "How do I steam milk?", "Does Willson teach brewing?"] },
     { keys: ['milk','steam','steaming','foam','froth','texture','flat white','cappuccino','cortado','latte'],
       a: ["Steaming milk well means stretching it early (that soft hiss), then whirling it until glossy — silky milk makes or breaks every milk drink.",
-          "Flat white vs cappuccino is really about foam depth; Willson can show you the difference in one session."] },
+          "Flat white vs cappuccino is really about foam depth; Willson can show you the difference in one session."],
+      suggest: ["Tips for latte art?", "Flat white vs cappuccino?", "Does Willson teach this?"] },
     { keys: ['bean','beans','grind','grinding','fresh','roast','roasting','store','storage','shelf life','whole bean'],
       a: ["Coffee stays best as whole beans, ground right before brewing, kept in an airtight container away from light and heat.",
-          "Buy fresh, use within 3–4 weeks of the roast date, and grind only what you need — the difference is huge."] },
+          "Buy fresh, use within 3–4 weeks of the roast date, and grind only what you need — the difference is huge."],
+      suggest: ["What's a good brew ratio?", "How long do beans stay fresh?", "What about espresso?"] },
     { keys: ['menu','drink menu','signature','recipe','recipes','idea','ideas','invent','create a drink'],
       a: ["A great menu balances flavour, margin, and mood — fewer items done perfectly beats a long list of okay ones.",
-          "That's exactly what Willson consults on — menu development is one of his signature services."] },
+          "That's exactly what Willson consults on — menu development is one of his signature services."],
+      suggest: ["Can he design my café menu?", "How can I hire him?", "What else does he offer?"] },
     { keys: ['thanks','thank you','appreciate','awesome','love the site','nice site','great site','cool site','amazing'],
       a: ["You're most welcome! ☕ That genuinely makes my day.",
-          "If you've got a moment, the little star rating in the footer means a lot — and enjoy the rest of the site!"] },
+          "If you've got a moment, the little star rating in the footer means a lot — and enjoy the rest of the site!"],
+      suggest: ["What does Willson do?", "How can I hire him?", "Give me his CV"] },
     { keys: ['bye','goodbye','see you','later','farewell','good night'],
       a: ["Take care! ☕ Come back any time — the kettle's always on.",
-          "And if you ever need Willson himself, you know where to find him: WhatsApp or the contact button up top."] },
+          "And if you ever need Willson himself, you know where to find him: WhatsApp or the contact button up top."],
+      suggest: ["What does Willson do?", "How can I contact him?", "Give me his CV"] },
     { keys: ['sections','whats on this site','where can i find','browse','site map','what is on this site'],
       a: ["The site flows like a good pour: About, Brew Trio, Experience, Services, Credentials, and Contact.",
-          "Use the nav up top — or tap the suggestion chips below for the quick answers."] },
+          "Use the nav up top — or tap the suggestion chips below for the quick answers."],
+      suggest: ["What does Willson do?", "Give me his CV", "How can I hire him?"] },
     { keys: ['event','events','pop up','popup','guest barista','catering','workshop','cupping','wedding','party'],
       a: ["Willson does pop-up coffee experiences, hospitality events, brand activations, and cupping workshops.",
-          "There's a Guest Barista & Events card in the Hire Me deck — or ping him on WhatsApp to plan something together."] },
+          "There's a Guest Barista & Events card in the Hire Me deck — or ping him on WhatsApp to plan something together."],
+      suggest: ["How can I book him?", "What services does he offer?", "How can I contact him?"] },
     { keys: ['training','learn','teach','course','coaching','mentor','classes','lesson'],
       a: ["Willson trains aspiring baristas one-on-one or in groups: espresso theory, latte art, manual brewing, and customer service.",
-          "Beginners are very welcome — he's mentored plenty of people from first tamp to full latte art."] }
+          "Beginners are very welcome — he's mentored plenty of people from first tamp to full latte art."],
+      suggest: ["Does he teach latte art?", "How can I book a session?", "What's his experience?"] }
   ];
+
+  var DEFAULT_SUGGEST = ["What does Willson do?", "How can I hire him?", "What are his skills?"];
 
   var GREETING = [
     "Hi! I'm Willson's assistant — freshly brewed and ready to help. ☕",
@@ -2965,8 +3006,14 @@
       var s = entryScore(KB[i], q);
       if (s > bestScore){ bestScore = s; best = KB[i]; }
     }
-    if (best && bestScore > 0) return { a: best.a, action: best.action || null };
-    return { a: FALLBACK, action: null };
+    if (best && bestScore > 0) return { a: best.a, action: best.action || null, suggest: best.suggest || null };
+    return { a: FALLBACK, action: null, suggest: null };
+  }
+
+  /* topic-matched follow-up questions (used when the AI sends none) */
+  function localSuggest(text){
+    var l = localAnswer(text);
+    return l.suggest || DEFAULT_SUGGEST;
   }
 
   /* intent -> tap-to-open action (mirrors the worker's detectAction) */
@@ -3048,7 +3095,27 @@
     afterBody.insertAdjacentElement('afterend', div);
   }
 
-  function stream(body, paras, action){
+  /* related follow-up chips under an answer — tap one to ask it */
+  function insertSuggestRow(body, suggestions){
+    if (!suggestions || !suggestions.length) return;
+    if (body.parentNode.querySelector('.cb-03__sugg')) return;
+    var row = document.createElement('div');
+    row.className = 'cb-03__sugg';
+    suggestions.slice(0, 3).forEach(function(s){
+      s = String(s).replace(/[?\s]+$/, '').trim();
+      if (!s) return;
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'cb-03__sugg-chip';
+      chip.textContent = s;
+      chip.setAttribute('aria-label', 'Ask: ' + s);
+      chip.addEventListener('click', function(){ ask(s); });
+      row.append(chip);
+    });
+    if (row.children.length) body.insertAdjacentElement('afterend', row);
+  }
+
+  function stream(body, paras, action, suggestions){
     busy = true; send.dataset.busy = ''; send.disabled = false;
     body.dataset.streaming = '';
     var pi = 0, wi = 0, para = null;
@@ -3072,6 +3139,7 @@
       send.disabled = !input.value.trim();
       if (!body.parentNode.querySelector('.cb-03__acts')) addActs(body);
       insertActionRow(body, action);   /* tap-to-open button under the reply */
+      insertSuggestRow(body, suggestions);  /* related follow-up questions */
       status.textContent = 'Response complete.';
     }
     body.__finish = finish;
@@ -3098,7 +3166,7 @@
     var body = addAI();
     if (controller) controller.abort();
     controller = new AbortController();
-    var to = setTimeout(function(){ controller.abort(); }, 4500);
+    var to = setTimeout(function(){ controller.abort(); }, 9000);
 
     fetch(WORKER_URL, {
       method: 'POST',
@@ -3110,11 +3178,12 @@
     .then(function(data){
       var reply = (data && data.reply) ? String(data.reply).split(/\n\n+/) : null;
       var action = (data && data.action) || detectAction(text);
-      stream(body, reply || localAnswer(text).a, action);
+      var sug = (data && data.suggestions && data.suggestions.length) ? data.suggestions : localSuggest(text);
+      stream(body, reply || localAnswer(text).a, action, sug);
     })
     .catch(function(){
       var local = localAnswer(text);
-      stream(body, local.a, local.action);
+      stream(body, local.a, local.action, localSuggest(text));
     })
     .finally(function(){ clearTimeout(to); });
   }
@@ -3446,5 +3515,5 @@
     });
   })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2df72ba7ff698d6',t:'MTc4NzIwODQ2Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2e01b759e1f7674',t:'MTc4NzIxNTM3Mw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

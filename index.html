@@ -2735,7 +2735,7 @@
         <a href="#craft">The craft</a>
         <a href="#services">Services</a>
         <a href="#contact">Contact</a>
-        <a href="/cdn-cgi/l/email-protection#4b392e383e262e0b3c222727382425392a226528242665253b">Email</a>
+        <a href="/cdn-cgi/l/email-protection#6d1f081e1800082d1a0401011e02031f0c04430e020043031d">Email</a>
       </nav>
       <div class="footer__socials" aria-label="Social links">
         <a href="https://www.instagram.com/willson_obito/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
@@ -2820,51 +2820,112 @@
   // Answers come from the local knowledge base below; if the Cloudflare
   // Worker backend is reachable, its reply streams in instead.
 
+  /* ============================================================
+     THE ASSISTANT'S BRAIN
+     Layer 1 — Cloudflare Workers AI (free tier, universal knowledge,
+     warm persona; deploy worker/worker.js and paste its URL below).
+     Layer 2 — this local knowledge base: fuzzy-matched, warm, and
+     wide (Willson's story + real coffee wisdom), so the chat is
+     smart even when the backend is unreachable.
+  ============================================================ */
+  var WORKER_URL = 'https://odd-lake-e6c5.matchahouse.workers.dev';  // <-- paste your deployed Worker URL here
+
   var KB = [
-    { keys: ['what do you do','what does he do','job','role','who are you','about him','about you'],
-      a: ["I'm Willson Rai — Head Barista and creative freelancer based in Lalitpur, Kathmandu Valley, Nepal.",
-          "Seven-plus years in specialty coffee, and outside the bar he designs menus, creates social content, and builds brand identities for cafés and restaurants."] },
-    { keys: ['skill','skills','good at','specialt','latte art','espresso'],
-      a: ["Core skills: espresso extraction, latte art, manual brewing, menu design, brand identity, and social media content creation.",
-          "Check the Services section on the page for the full breakdown."] },
-    { keys: ['contact','reach','email','whatsapp','phone','hire','hire him','get in touch'],
+    { keys: ['hi','hello','hey','namaste','yo','good morning','good afternoon','good evening'],
+      a: ["Hey there! ☕ Lovely to see you at Willson's corner of the internet.",
+          "Ask me about his barista journey, his services, some real coffee wisdom, or how to reach him — what's on your mind?"] },
+    { keys: ['who are you','who is willson','what does he do','what do you do','about him','about willson','about you','job','role','profession','barista'],
+      a: ["Willson Rai is a Head Barista and creative freelancer from Lalitpur, Kathmandu Valley — 7+ years deep in specialty coffee.",
+          "Beyond the bar, he designs menus, crafts social content, and builds brand identities for cafés. The About section tells the full story."] },
+    { keys: ['skill','skills','good at','specialize','specialty','strong at','expertise','talents','what can he do'],
+      a: ["Willson's toolkit: espresso extraction, latte art, manual brewing, menu design, branding, photography, and barista training.",
+          "He's also a natural teacher — ask me about his training sessions if you're curious."] },
+    { keys: ['experience','years','history','worked','career','background','timeline'],
+      a: ["He has 7+ years in coffee and hospitality — from pulling his first shots to leading teams and training baristas.",
+          "The Experience section walks through every stop, café by café."] },
+    { keys: ['services','service','freelance','freelancer','design work','menu design','graphic','photography','videography','branding','brand identity','offerings','what does he offer'],
+      a: ["As a freelancer he offers menu design, social media content, branding, photography, barista consulting, training, and guest-barista events.",
+          "The Services section has two decks — The Craft and Hire Me — click any card to explore."] },
+    { keys: ['hire','book','booking','price','prices','cost','fee','rate','rates','charge','charges','available','availability','quote','how much'],
+      a: ["He takes on café collaborations, menu consulting, training, and events — every project is quoted individually.",
+          "Tell him your idea on WhatsApp at wa.me/9779765829096 and he'll get back with the details."] },
+    { keys: ['contact','reach','email','whatsapp','phone','number','call','message','get in touch'],
       a: ["The fastest route is WhatsApp: wa.me/9779765829096.",
-          "You can also use the Get in touch button up top."] },
-    { keys: ['where','location','based','live','city','country'],
-      a: ["He's based in Lalitpur, in the Kathmandu Valley, Nepal."] },
-    { keys: ['cv','resume','download'],
-      a: ["You can view or download his CV at cv.html."] },
-    { keys: ['experience','years','history','work history'],
-      a: ["He has 7+ years of experience in coffee and hospitality.",
-          "The Experience section on the page has the full timeline."] },
-    { keys: ['instagram','social','github','portfolio link'],
+          "You can also hit the Get in touch button up top, or use the email link in the footer."] },
+    { keys: ['where','location','based','live','city','address','kathmandu','lalitpur','nepal','country'],
+      a: ["Willson is based in Lalitpur, in the Kathmandu Valley, Nepal.",
+          "Most of his work happens around Kathmandu and Lalitpur — and events can travel."] },
+    { keys: ['cv','resume','download','curriculum vitae','pdf'],
+      a: ["You can view or download his CV right here on the site — check cv.html.",
+          "It's got the full experience, training, and certifications neatly laid out."] },
+    { keys: ['instagram','github','social','facebook','tiktok','twitter','youtube','follow','links'],
       a: ["Find him on Instagram (@willson_obito) and GitHub (Willsonraiii).",
-          "The links are in the site footer too."] },
-    { keys: ['freelance','freelancer','services','design work'],
-      a: ["As a freelancer he designs menus, crafts social media content, and builds brand identities for cafés and small businesses.",
-          "See the Services section for examples."] },
-    { keys: ['hi','hello','hey'],
-      a: ["Hey! I'm here to answer quick questions about Willson's work, skills, or how to reach him.",
-          "What would you like to know?"] }
+          "The icons live in the site footer — one tap and you're there."] },
+    { keys: ['espresso','shot','shots','extraction','crema','dial in','dialing','9 bar','grinder'],
+      a: ["Espresso wisdom from the bar: aim for roughly a 1:2 ratio in about 25–30 seconds at 9 bars — then trust your taste buds over the timer.",
+          "Willson dials in by dose, yield, and time, then adjusts for the roast. His training sessions cover this in depth."] },
+    { keys: ['latte art','rosetta','tulip','heart','pour','microfoam','art'],
+      a: ["Latte art is 80% milk texture: silky, glossy microfoam with no big bubbles — the pour simply draws with it.",
+          "Willson pours everything from hearts to swans, and he teaches it step by step in his training sessions."] },
+    { keys: ['v60','pour over','pourover','aeropress','chemex','french press','brew','brewing','filter','immersion','method'],
+      a: ["For pour-overs, Willson's rule of thumb: 1:15 to 1:16 coffee-to-water, water just off the boil, and a slow, even pour.",
+          "V60 for clarity, AeroPress for body, Chemex for clean cups — each bean picks its own method."] },
+    { keys: ['milk','steam','steaming','foam','froth','texture','flat white','cappuccino','cortado','latte'],
+      a: ["Steaming milk well means stretching it early (that soft hiss), then whirling it until glossy — silky milk makes or breaks every milk drink.",
+          "Flat white vs cappuccino is really about foam depth; Willson can show you the difference in one session."] },
+    { keys: ['bean','beans','grind','grinding','fresh','roast','roasting','store','storage','shelf life','whole bean'],
+      a: ["Coffee stays best as whole beans, ground right before brewing, kept in an airtight container away from light and heat.",
+          "Buy fresh, use within 3–4 weeks of the roast date, and grind only what you need — the difference is huge."] },
+    { keys: ['menu','drink menu','signature','recipe','recipes','idea','ideas','invent','create a drink'],
+      a: ["A great menu balances flavour, margin, and mood — fewer items done perfectly beats a long list of okay ones.",
+          "That's exactly what Willson consults on — menu development is one of his signature services."] },
+    { keys: ['thanks','thank you','appreciate','awesome','love the site','nice site','great site','cool site','amazing'],
+      a: ["You're most welcome! ☕ That genuinely makes my day.",
+          "If you've got a moment, the little star rating in the footer means a lot — and enjoy the rest of the site!"] },
+    { keys: ['bye','goodbye','see you','later','farewell','good night'],
+      a: ["Take care! ☕ Come back any time — the kettle's always on.",
+          "And if you ever need Willson himself, you know where to find him: WhatsApp or the contact button up top."] },
+    { keys: ['sections','whats on this site','where can i find','browse','site map','what is on this site'],
+      a: ["The site flows like a good pour: About, Brew Trio, Experience, Services, Credentials, and Contact.",
+          "Use the nav up top — or tap the suggestion chips below for the quick answers."] },
+    { keys: ['event','events','pop up','popup','guest barista','catering','workshop','cupping','wedding','party'],
+      a: ["Willson does pop-up coffee experiences, hospitality events, brand activations, and cupping workshops.",
+          "There's a Guest Barista & Events card in the Hire Me deck — or ping him on WhatsApp to plan something together."] },
+    { keys: ['training','learn','teach','course','coaching','mentor','classes','lesson'],
+      a: ["Willson trains aspiring baristas one-on-one or in groups: espresso theory, latte art, manual brewing, and customer service.",
+          "Beginners are very welcome — he's mentored plenty of people from first tamp to full latte art."] }
   ];
 
   var GREETING = [
-    "Hi! I'm Willson's assistant.",
-    "Ask me about his work, skills, how to hire him, or grab his CV — I'll answer instantly."
+    "Hi! I'm Willson's assistant — freshly brewed and ready to help. ☕",
+    "Ask me about his work, skills, coffee, or how to hire him — I'll answer instantly."
   ];
   var FALLBACK = [
-    "Good question — I don't have a canned answer for that one yet.",
-    "For anything specific, the fastest route is WhatsApp: wa.me/9779765829096."
+    "That one's a little beyond my recipe book for now — I'm the in-house assistant, so I'm sharpest on Willson's work, skills, coffee, and how to reach him.",
+    "Try asking about his experience, services, or training — or hop on WhatsApp at wa.me/9779765829096 for anything specific."
   ];
 
-  function localAnswer(text){
-    var q = text.toLowerCase();
-    for (var i = 0; i < KB.length; i++){
-      for (var j = 0; j < KB[i].keys.length; j++){
-        if (q.indexOf(KB[i].keys[j]) !== -1) return KB[i].a;
-      }
+  /* fuzzy matcher: word-boundary hits, multi-word phrases score higher */
+  function norm(s){ return s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function entryScore(entry, q){
+    var score = 0;
+    for (var i = 0; i < entry.keys.length; i++){
+      var k = entry.keys[i];
+      var hit = (k.indexOf(' ') !== -1)
+        ? q.indexOf(k) !== -1
+        : new RegExp('(^|[^a-z])' + k + '([^a-z]|$)').test(q);
+      if (hit) score += (k.indexOf(' ') !== -1) ? 2 : 1;
     }
-    return FALLBACK;
+    return score;
+  }
+  function localAnswer(text){
+    var q = norm(text);
+    var best = null, bestScore = 0;
+    for (var i = 0; i < KB.length; i++){
+      var s = entryScore(KB[i], q);
+      if (s > bestScore){ bestScore = s; best = KB[i]; }
+    }
+    return (best && bestScore > 0) ? best.a : FALLBACK;
   }
 
   var root = document.querySelector('.chat-panel .cb-03');
@@ -2945,6 +3006,21 @@
 
   function ask(text){
     if (busy) return;
+
+    // multi-turn memory: capture the conversation BEFORE adding this message,
+    // so the AI sees prior context (and the current message only once)
+    var history = [];
+    try{
+      Array.prototype.slice.call(thread.querySelectorAll('.cb-03__turn')).slice(-6).forEach(function(t){
+        var body = t.querySelector('.cb-03__body');
+        if (!body || !body.innerText.trim()) return;
+        history.push({
+          role: t.classList.contains('cb-03__turn--user') ? 'user' : 'assistant',
+          content: body.innerText.trim().slice(0, 800)
+        });
+      });
+    }catch(e){}
+
     addUser(text);
     var body = addAI();
     if (controller) controller.abort();
@@ -2952,10 +3028,10 @@
     var timedOut = false;
     var to = setTimeout(function(){ timedOut = true; controller.abort(); }, 4500);
 
-    fetch('https://odd-lake-e6c5.matchahouse.workers.dev', {
+    fetch(WORKER_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: text }),
+      body: JSON.stringify({ message: text, history: history }),
       signal: controller.signal
     })
     .then(function(r){ if (!r.ok) throw new Error('no backend'); return r.json(); })
@@ -3281,5 +3357,5 @@
     });
   })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2d733c4586cede5',t:'MTc4NzEyMTk5Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2df047f88ed7b80',t:'MTc4NzIwMzk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

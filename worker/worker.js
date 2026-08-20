@@ -77,6 +77,55 @@ function detectAction(message) {
   return null;
 }
 
+// Generates 3 short, contextual follow-up question suggestions for ANY topic.
+// Runs on the fast 8B model in parallel with the main reply.
+async function generateSuggestions(env, message) {
+  try {
+    const ai = await env.AI.run("@cf/meta/llama-3.1-8b-instruct-fast", {
+      messages: [
+        {
+          role: "system",
+          content:
+            "You write follow-up question suggestions for a website chat assistant. Reply with exactly 3 short questions separated by the | character. Each question max 6 words, no numbering, no quotes, no extra text. Keep them natural and related to the visitor's question.",
+        },
+        { role: "user", content: "Visitor asked: " + message + "\nSuggest 3 short follow-up questions a visitor might tap next:" },
+      ],
+      max_tokens: 70,
+      temperature: 0.8,
+    });
+    const parts = (ai.response || "")
+      .split("|")
+      .map((s) => s.trim().replace(/^[\d.\-)\s]+/, ""))
+      .filter(Boolean)
+      .slice(0, 3);
+    return parts.length ? parts : null;
+  } catch (e) {
+    return null; // suggestions are optional — the page has topic fallbacks
+  }
+}
+
+async function mainReply(env, messages) {
+  const MODELS = [
+    "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+    "@cf/meta/llama-3.1-8b-instruct-fast",
+  ];
+  for (const model of MODELS) {
+    try {
+      const ai = await env.AI.run(model, {
+        messages,
+        max_tokens: 500,
+        temperature: 0.7,
+        top_p: 0.9,
+      });
+      const reply = (ai.response || "").trim();
+      if (reply) return reply;
+    } catch (err) {
+      // model unavailable -> try next
+    }
+  }
+  return "";
+}
+
 function buildMessages(body) {
   const message = (body.message || "").toString().trim().slice(0, 1000);
   const messages = [{ role: "system", content: SYSTEM_PROMPT }];
@@ -126,31 +175,19 @@ export default {
       });
     }
 
-    // Model cascade: the big brain first, then the fast one.
-    // 70B is available on the free tier; if an account or region lacks it,
-    // we silently fall back to 8B.
-    const MODELS = [
-      "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
-      "@cf/meta/llama-3.1-8b-instruct-fast",
-    ];
+    // Main reply (70B cascade) and follow-up suggestions run in parallel —
+    // the visitor gets the answer AND related tap-to-ask chips in one round trip.
+    const userMessage = messages[messages.length - 1].content;
+    const [reply, suggestions] = await Promise.all([
+      mainReply(env, messages),
+      generateSuggestions(env, userMessage),
+    ]);
 
-    for (const model of MODELS) {
-      try {
-        const ai = await env.AI.run(model, {
-          messages,
-          max_tokens: 500,
-          temperature: 0.7,
-          top_p: 0.9,
-        });
-        const reply = (ai.response || "").trim();
-        if (reply) {
-          return new Response(JSON.stringify({ reply, action: detectAction(messages[messages.length - 1].content) }), {
-            headers: { "Content-Type": "application/json", ...corsHeaders(origin) },
-          });
-        }
-      } catch (err) {
-        // This model is unavailable -> try the next one.
-      }
+    if (reply) {
+      return new Response(
+        JSON.stringify({ reply, action: detectAction(userMessage), suggestions }),
+        { headers: { "Content-Type": "application/json", ...corsHeaders(origin) } }
+      );
     }
 
     // Both models failed: friendly message instead of an error.

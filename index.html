@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>try{if(localStorage.getItem('wr-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
+<script>
+  /* Theme: saved choice wins; otherwise follow the device's dark/light setting.
+     Splash: plays once per tab session (sessionStorage) — no repeat on reload. */
+  (function(){
+    try{
+      var saved = localStorage.getItem('wr-theme');
+      if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)){
+        document.documentElement.setAttribute('data-theme','dark');
+      }
+      if (sessionStorage.getItem('wr-splash')) document.documentElement.classList.add('no-splash');
+    }catch(e){}
+  })();
+</script>
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-E4HNRVBCG2"></script>
 <script>
@@ -104,7 +116,7 @@
       --shadow: rgba(16,19,25,.14);
       --measure: 44rem;
       --sans: "Plus Jakarta Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-      --mono: "JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+      --mono: ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
       position: relative;
       flex: 1; min-height: 0;
       width: 100%;
@@ -252,6 +264,32 @@
     @keyframes cb-03-caret {
       0%, 49% { opacity: 1; }
       50%, 100% { opacity: 0; }
+    }
+
+    /* tap-to-open action buttons (WhatsApp / CV / Instagram / Email) */
+    .cb-03__actions{
+      display:flex; flex-wrap:wrap; gap:.45rem;
+      margin-block-start:.2rem;
+      animation: cb-03-pop .45s cubic-bezier(.16,1,.3,1) backwards;
+    }
+    .cb-03__btn-action{
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.55rem 1.05rem; border-radius:999px;
+      background:var(--acc); color:#fff; border:none;
+      font:inherit; font-size:.85rem; font-weight:600;
+      text-decoration:none; cursor:pointer;
+      box-shadow:0 6px 16px -8px rgba(16,163,127,.55);
+      transition:transform .22s cubic-bezier(.16,1,.3,1), filter .2s, box-shadow .2s;
+    }
+    .cb-03__btn-action:hover{ transform:translateY(-2px); filter:brightness(1.07); }
+    .cb-03__btn-action:focus-visible{ outline:2px solid var(--ring); outline-offset:2px; }
+    .cb-03__btn-action svg{ width:15px; height:15px; flex-shrink:0; }
+    .cb-03__btn-action--alt{
+      background:var(--ink); color:var(--surface);
+      box-shadow:0 6px 16px -8px rgba(0,0,0,.4);
+    }
+    html[data-theme="dark"] .cb-03__btn-action--alt{
+      background:var(--ink); color:var(--surface);
     }
 
     /* actions */
@@ -419,10 +457,11 @@
   
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://willsonrai.com.np/" />
+  <meta property="og:url" content="https://www.willsonrai.com.np/" />
+  <link rel="canonical" href="https://www.willsonrai.com.np/" />
   <meta property="og:title" content="Willson Rai — Head Barista & Creative Freelancer in Lalitpur, Kathmandu" />
   <meta property="og:description" content="7+ years of expertise in specialty coffee and creative freelancing in Kathmandu Valley, Nepal — from precision extraction to menu consulting." />
-  <meta property="og:image" content="https://willsonrai.com.np/images/latte-pour.png" />
+  <meta property="og:image" content="https://www.willsonrai.com.np/images/latte-pour.png" />
 
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
@@ -452,9 +491,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
   :root{
     --bg:        #14102a;
@@ -1482,7 +1519,7 @@
      VIBES SKIN — design language from vibes.site (studied & copied):
      white base, black text, 1.5px black borders, peach->pink gradient
      cards with scrolling dot pattern, pattern-striped shadows,
-     Poly Sans / Geist Mono type, primary blue #0036ff.
+     Space Grotesk type, primary blue #0036ff.
      (Overrides the dark/neon theme; interactions unchanged.)
   ================================================================ */
   html:not([data-theme="dark"]){
@@ -1834,6 +1871,8 @@
 
 
   /* --- theme toggle: one icon-only button, floating above the chat FAB --- */
+  html.no-splash .brew-splash{ display:none; }
+
   .theme-toggle{
     position: fixed; right: 26px; bottom: 98px; z-index: 9998;
     width: 46px; height: 46px; border-radius: 50%;
@@ -2121,7 +2160,7 @@
 
   <!-- SKILL OVERLAYS -->
 
-  <main id="top" role="main">
+  <main id="top" role="main" tabindex="-1">
 
     <!-- HERO -->
     <section class="hero" id="hero">
@@ -2290,7 +2329,7 @@
         </div>
         <div class="about__grid">
           <div class="about__photo reveal d1">
-            <img src="images/latte-pour.png" alt="Willson Rai pouring latte art" width="415" height="739" loading="lazy" decoding="async" />
+            <img src="images/latte-pour.webp" alt="Willson Rai pouring latte art" width="415" height="739" loading="lazy" decoding="async" />
           </div>
           <div class="about__body reveal d2">
             <p>I'm Willson Rai, a passionate Head Barista and creative freelancer based in Lalitpur, in the Kathmandu Valley, Nepal. With over seven years in the coffee and hospitality industry, I've grown from pulling my first espresso shot to leading teams, training new baristas, and creating visual identities for cafés and restaurants across Kathmandu and Lalitpur.</p>
@@ -2735,7 +2774,7 @@
         <a href="#craft">The craft</a>
         <a href="#services">Services</a>
         <a href="#contact">Contact</a>
-        <a href="/cdn-cgi/l/email-protection#6d1f081e1800082d1a0401011e02031f0c04430e020043031d">Email</a>
+        <a href="/cdn-cgi/l/email-protection#f3819680869e96b3849a9f9f809c9d81929add909c9edd9d83">Email</a>
       </nav>
       <div class="footer__socials" aria-label="Social links">
         <a href="https://www.instagram.com/willson_obito/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
@@ -2848,19 +2887,20 @@
           "The Services section has two decks — The Craft and Hire Me — click any card to explore."] },
     { keys: ['hire','book','booking','price','prices','cost','fee','rate','rates','charge','charges','available','availability','quote','how much'],
       a: ["He takes on café collaborations, menu consulting, training, and events — every project is quoted individually.",
-          "Tell him your idea on WhatsApp at wa.me/9779765829096 and he'll get back with the details."] },
+          "Tap below and tell him your idea — he'll get back with the details."],
+      action: { type: 'wa', label: 'Chat on WhatsApp', href: 'https://wa.me/9779765829096' } },
     { keys: ['contact','reach','email','whatsapp','phone','number','call','message','get in touch'],
-      a: ["The fastest route is WhatsApp: wa.me/9779765829096.",
-          "You can also hit the Get in touch button up top, or use the email link in the footer."] },
+      a: ["Tap below to reach Willson directly — it's the fastest way."],
+      action: { type: 'wa', label: 'Chat on WhatsApp', href: 'https://wa.me/9779765829096' } },
     { keys: ['where','location','based','live','city','address','kathmandu','lalitpur','nepal','country'],
       a: ["Willson is based in Lalitpur, in the Kathmandu Valley, Nepal.",
           "Most of his work happens around Kathmandu and Lalitpur — and events can travel."] },
     { keys: ['cv','resume','download','curriculum vitae','pdf'],
-      a: ["You can view or download his CV right here on the site — check cv.html.",
-          "It's got the full experience, training, and certifications neatly laid out."] },
+      a: ["One tap and his full CV is open on your screen."],
+      action: { type: 'cv', label: 'View CV', href: 'cv.html' } },
     { keys: ['instagram','github','social','facebook','tiktok','twitter','youtube','follow','links'],
-      a: ["Find him on Instagram (@willson_obito) and GitHub (Willsonraiii).",
-          "The icons live in the site footer — one tap and you're there."] },
+      a: ["Tap below to follow Willson on Instagram."],
+      action: { type: 'ig', label: 'Follow on Instagram', href: 'https://www.instagram.com/willson_obito/' } },
     { keys: ['espresso','shot','shots','extraction','crema','dial in','dialing','9 bar','grinder'],
       a: ["Espresso wisdom from the bar: aim for roughly a 1:2 ratio in about 25–30 seconds at 9 bars — then trust your taste buds over the timer.",
           "Willson dials in by dose, yield, and time, then adjusts for the roast. His training sessions cover this in depth."] },
@@ -2925,7 +2965,39 @@
       var s = entryScore(KB[i], q);
       if (s > bestScore){ bestScore = s; best = KB[i]; }
     }
-    return (best && bestScore > 0) ? best.a : FALLBACK;
+    if (best && bestScore > 0) return { a: best.a, action: best.action || null };
+    return { a: FALLBACK, action: null };
+  }
+
+  /* intent -> tap-to-open action (mirrors the worker's detectAction) */
+  function detectAction(text){
+    var q = text.toLowerCase();
+    if (/\bcv\b|resume|curriculum/.test(q)) return { type: 'cv', label: 'View CV', href: 'cv.html' };
+    if (/instagram|social|follow|github/.test(q)) return { type: 'ig', label: 'Follow on Instagram', href: 'https://www.instagram.com/willson_obito/' };
+    if (/email|e-?mail/.test(q)) return { type: 'mail', label: 'Email Willson', href: 'mailto:resume@willsonrai.com.np' };
+    if (/contact|reach|whatsapp|\bwa\b|hire|book|price|quote|call|phone|get in touch|message/.test(q)) return { type: 'wa', label: 'Chat on WhatsApp', href: 'https://wa.me/9779765829096' };
+    return null;
+  }
+
+  var ACTION_ICONS = {
+    wa: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 1.8a8.2 8.2 0 1 1-4.2 15.3l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 0 1 12 3.8zM8.8 7.3c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 2.2.9 2.6.7 3.1.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3l-1.7-.8c-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.1-.2 0-.4.1-.5l.6-.7c.2-.2.2-.4.1-.6L9.6 7.6c-.2-.2-.5-.3-.8-.3z"/></svg>',
+    cv: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>',
+    ig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>'
+  };
+
+  function insertActionRow(body, action){
+    if (!action || body.parentNode.querySelector('.cb-03__actions')) return;
+    var row = document.createElement('div');
+    row.className = 'cb-03__actions';
+    var a = document.createElement('a');
+    a.className = 'cb-03__btn-action' + (action.type !== 'wa' ? ' cb-03__btn-action--alt' : '');
+    a.href = action.href;
+    if (/^https?:/.test(action.href)){ a.target = '_blank'; a.rel = 'noopener'; }
+    a.setAttribute('aria-label', action.label);
+    a.innerHTML = (ACTION_ICONS[action.type] || '') + '<span>' + action.label + '</span>';
+    row.append(a);
+    body.insertAdjacentElement('afterend', row);
   }
 
   var root = document.querySelector('.chat-panel .cb-03');
@@ -2976,7 +3048,7 @@
     afterBody.insertAdjacentElement('afterend', div);
   }
 
-  function stream(body, paras){
+  function stream(body, paras, action){
     busy = true; send.dataset.busy = ''; send.disabled = false;
     body.dataset.streaming = '';
     var pi = 0, wi = 0, para = null;
@@ -2999,6 +3071,7 @@
       delete body.dataset.streaming; delete send.dataset.busy;
       send.disabled = !input.value.trim();
       if (!body.parentNode.querySelector('.cb-03__acts')) addActs(body);
+      insertActionRow(body, action);   /* tap-to-open button under the reply */
       status.textContent = 'Response complete.';
     }
     body.__finish = finish;
@@ -3025,8 +3098,7 @@
     var body = addAI();
     if (controller) controller.abort();
     controller = new AbortController();
-    var timedOut = false;
-    var to = setTimeout(function(){ timedOut = true; controller.abort(); }, 4500);
+    var to = setTimeout(function(){ controller.abort(); }, 4500);
 
     fetch(WORKER_URL, {
       method: 'POST',
@@ -3037,9 +3109,13 @@
     .then(function(r){ if (!r.ok) throw new Error('no backend'); return r.json(); })
     .then(function(data){
       var reply = (data && data.reply) ? String(data.reply).split(/\n\n+/) : null;
-      stream(body, reply || localAnswer(text));
+      var action = (data && data.action) || detectAction(text);
+      stream(body, reply || localAnswer(text).a, action);
     })
-    .catch(function(){ stream(body, localAnswer(text)); })
+    .catch(function(){
+      var local = localAnswer(text);
+      stream(body, local.a, local.action);
+    })
     .finally(function(){ clearTimeout(to); });
   }
 
@@ -3184,6 +3260,11 @@
       splash.remove();
       return;
     }
+    if (document.documentElement.classList.contains('no-splash')){
+      splash.remove();   /* already brewed once this session */
+      return;
+    }
+    try{ sessionStorage.setItem('wr-splash', '1'); }catch(e){}
 
     var root = splash.querySelector('.la-11');
     var bar = splash.querySelector('[role="progressbar"]');
@@ -3291,6 +3372,13 @@
     var sendBtn = root.querySelector('.review__send');
     var status = root.querySelector('.review__status');
     var rating = 0, sent = false;
+    try{ rating = parseInt(localStorage.getItem('wr-review') || '0', 10) || 0; }catch(e){}
+    if (rating > 0){
+      paint(rating, 'on'); paint(rating, 'sel');
+      stars.forEach(function(b, j){ b.setAttribute('aria-pressed', String(j < rating)); });
+      status.textContent = 'You rated this site ' + rating + ' star' + (rating > 1 ? 's' : '') + ' ⭐ — thank you!';
+      status.className = 'review__status ok';
+    }
 
     function paint(n, cls){ stars.forEach(function(b, i){ b.classList.toggle(cls, i < n); }); }
     function reset(){ paint(0, 'on'); paint(0, 'sel'); stars.forEach(function(b){ b.setAttribute('aria-pressed','false'); }); }
@@ -3299,8 +3387,9 @@
       btn.addEventListener('mouseenter', function(){ if (!sent) paint(i + 1, 'on'); });
       btn.addEventListener('mouseleave', function(){ if (!sent) paint(rating, 'on'); });
       btn.addEventListener('click', function(){
-        if (sent) return;
         rating = i + 1;
+        try{ localStorage.setItem('wr-review', String(rating)); }catch(e){}
+        sent = false;   /* a new rating may be sent again */
         paint(rating, 'on'); paint(rating, 'sel');
         stars.forEach(function(b, j){ b.setAttribute('aria-pressed', String(j < rating)); });
         form.hidden = false;
@@ -3357,5 +3446,5 @@
     });
   })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2df047f88ed7b80',t:'MTc4NzIwMzk0Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2df72ba7ff698d6',t:'MTc4NzIwODQ2Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

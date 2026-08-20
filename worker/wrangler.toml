@@ -1,6 +1,1 @@
-name = "willson-assistant"
-main = "worker.js"
-compatibility_date = "2024-09-01"
-
-[ai]
-binding = "AI"
+name = "odd-lake-e6c5"

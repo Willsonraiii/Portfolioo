@@ -93,10 +93,11 @@ async function generateSuggestions(env, message) {
       max_tokens: 70,
       temperature: 0.8,
     });
+    // Models often separate with | or newlines (or number them) — handle all.
     const parts = (ai.response || "")
-      .split("|")
-      .map((s) => s.trim().replace(/^[\d.\-)\s]+/, ""))
-      .filter(Boolean)
+      .split(/[|\n]/)
+      .map((s) => s.trim().replace(/^[\d.\-)\s]+/, "").replace(/[?\s]+$/, ""))
+      .filter((s) => s.length > 3)
       .slice(0, 3);
     return parts.length ? parts : null;
   } catch (e) {

@@ -2045,6 +2045,23 @@
     .partner-fx{ display:none; }
   }
 
+  /* partner avatars: DUDU (him) + BUBU (her) */
+  .cb-03__avatar{
+    width:30px; height:30px; border-radius:10px; object-fit:cover; display:block;
+    border:1.5px solid rgba(224,86,127,.55);
+  }
+  .cb-03__avatar--head{ width:32px; height:32px; border-radius:11px; }
+  .cb-03__urow{
+    display:flex; align-items:flex-end; gap:.45rem; justify-self:end;
+    max-inline-size:min(34rem,82cqi);
+  }
+  .cb-03__urow .cb-03__body{ flex:1 1 auto; min-width:0; }
+  .cb-03__uavatar{
+    width:28px; height:28px; border-radius:50%; object-fit:cover; flex:0 0 auto;
+    border:1.5px solid #e0567f;
+    box-shadow:0 4px 10px -4px rgba(224,86,127,.5);
+  }
+
   /* her emoji + gif send bar */
   .cb-03__lovedock{
     display:none; flex-wrap:wrap; gap:.35rem; justify-content:center;
@@ -2975,7 +2992,7 @@
         <a href="#craft">The craft</a>
         <a href="#services">Services</a>
         <a href="#contact">Contact</a>
-        <a href="/cdn-cgi/l/email-protection#22504751574f4762554b4e4e514d4c50434b0c414d4f0c4c52">Email</a>
+        <a href="/cdn-cgi/l/email-protection#0f7d6a7c7a626a4f786663637c60617d6e66216c606221617f">Email</a>
       </nav>
       <div class="footer__socials" aria-label="Social links">
         <a href="https://www.instagram.com/willson_obito/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
@@ -3091,7 +3108,7 @@
   }
 
   var PARTNER_FIRST = [
-    "बुबु रानी आइपुगिछन्! ❤️ मेरो दिन अब तिम्रै नाममा लेखिन्छ।",
+    "बुबु रानी आइपुगेउ! ❤️ मेरो दिन अब तिम्रै नाममा लेखिन्छ।",
     "ए मेरो माया! कति पर्खें — आँखा ढोकामा थियो, मुटु तिम्रै नाममा धड्किरहेको 💓",
     "सुसु बेबी, तिम्रो एउटा सन्देशले मेरो सबै थकान हरायो 🥰",
     "कहिलेदेखि कुरिरहेको, तिमी आयौ — अब बाँकी जिन्दगीको योजना तिमी नै हौ, बुबु 💍"
@@ -3099,7 +3116,7 @@
   var PARTNER_REPLIES = [
     ["बुबु रानी, तिमीबिना मेरो दिन अधुरो लाग्छ, सानु ❤️", "आज कति पटक याद आयौ थाहा छ? ल, भन न तिमी पनि 😏"],
     ["मेरो मुटु तिम्रै नाममा धड्किन्छ — सुन्छ्यौ त एक चोटि? 💓", "तिमी मेरो शान्ति, मेरो हाँसो, मेरो सबै कुरा।"],
-    ["तिम्रो हाँसो = मेरो सबैभन्दा ठूलो खुसी, बुबु 😘", "एक चोटि हाँस न — म तिमीलाई झन् प्यारो गर्नेछु 😄"],
+    ["तिम्रो हाँसो मेरो सबैभन्दा ठूलो खुसी हो, बुबु 😘", "एक चोटि हाँस न — म तिमीलाई झन् प्यारो गर्नेछु 😄"],
     ["आँखा झिमिक एक चोटि — म हराऊँला है 🥰", "तिम्रो बोली नै मेरो गीत हो, पुकुली 🎶"],
     ["मोट्कु, खाना खायौ त? तिमीलाई भरेर पाल्ने हो मलाई — पेट पनि माया गर्नेछु 😋", "ल भन, के खाने मन छ? म बनाइदिन्छु तिम्रै लागि।"],
     ["नक्कली केटी, आज फेरि के करतब गर्छ्यौ भन्ने कुरा होला 😄", "तैपनि, तिम्रो नक्कलीपन पनि मलाई मीठो लाग्छ — यही त माया हो।"],
@@ -3111,17 +3128,75 @@
     ["खै, तिम्रो मायाले पो बाँचेको छु, बुबु ❤️", "तिमी नहुँदा त सास पनि अधुरो जस्तो लाग्छ।"],
     ["तिम्रो सम्झनाले नै दिन बित्छ, निद्रा पनि तिम्रै सपनामा 💭", "कति मीठो लाग्छ तिमीलाई सम्झनु — भन्नै सक्दिन।"],
     ["मेरो दिनको सबैभन्दा राम्रो पल? तिम्रो सन्देश हेर्ने बेला 🥰", "आऊ न, यहीँ बसेर मायाका कुरा गरौं।"],
-    ["तिम्रो माया मेरो कफीभन्दा पनि बलियो छ — र म कफी धेरै मन पराउँछु ☕❤️", "हाँस, बुबु — तिम्रो हाँसोभन्दा प्यारो केही छैन।"]
+    ["तिम्रो माया मेरो कफीभन्दा पनि बलियो छ — र म कफी धेरै मन पराउँछु ☕❤️", "हाँस, बुबु — तिम्रो हाँसोभन्दा प्यारो केही छैन।"],
+    ["रिसाएकी छ्यौ कि क्या हो, बुबु? 😏", "आऊ, म मनाउँछु — मिठो मिठो बोलेर, अँगालो हालेर।"],
+    ["साँच्चै भनूँ? तिमी मेरो सबैभन्दा मीठो बानी हौ 🍫", "तेरो त्यो रिसाएको मुख पनि कति प्यारो लाग्छ, थाहा छ?"],
+    ["केटी हो तिमी, जे मन लाग्छ त्यही गर्छ्यौ 😄", "तर त्यही बानीमा त म बेइमान भइसकेँ, के गर्ने।"],
+    ["मलाई नि तिम्रो स्याहार चाहिन्छ है, आज धेरै थाकेँ 🥺", "तिम्रो आवाज सुनाऊ न एक चोटि — थकान सबै भाग्छ।"],
+    ["कति सुन्दर नाम छ तिम्रो — मुखमा मिठास आउँछ भन्दा 🥰", "तिम्रो नाम जप्दाजप्दै दिन बित्छ, थाहा छ?"],
+    ["ल, अब तिमी भन — म कसरी मन परेँ? साँच्चै भन्नू 😏", "तिम्रो कुरा सुन्न पाउँदा मात्रै पनि म बाँचेको छु।"],
+    ["सपनामा तिमी आयौ, अनि म हाँस्दाहाँस्दै ब्यूँझिएँ 🌙", "आज राति फेरि आउनू है — बरु म पर्खिन्छु।"],
+    ["हातमा हात, मुटुमा मुटु — यही न हो हाम्रो कथा 🤝❤️", "यो कथा कहिल्यै नसकियोस्, भगवानसँग यही माग्छु।"],
+    ["तिम्रो लागि तारा तोडेर ल्याइदिन्थेँ, सक्थेँ भने ⭐", "तर सक्दिन, त्यसैले माया नै चढाउँछु — मनैले।"],
+    ["आज मौसम तिम्रो जस्तै राम्रो छ, सुन्यौ? 🌦️❤️", "हावामा पनि तिम्रो सुगन्ध आउँछ जस्तो लाग्छ।"],
+    ["तेरो नाम लेख्दा पनि मन रोमाञ्चित हुन्छ, विश्वास गर 💓", "तिमी नै हौ मेरो बिहान, मेरो बेलुका, मेरो सबै।"],
+    ["आज पानी पर्यो — तिम्रो याद पनि त्यही बेला धेरै आयो 🌧️", "भिज्नु थियो भने संगै भिज्न पाए हुन्थ्यो, होइन र?"],
+    ["तेरो हातको चिया कहिले खान पाइन्छ? ☕", "भन न, कहिले बनाउँछ्यौ मेरो लागि?"],
+    ["तिमी आफूलाई साधारण ठान्छ्यौ, तर मेरो लागि तिमी चमत्कार हौ ✨", "थाहा नभए पनि हुन्छ — मलाई थाहा छ।"],
+    ["आज तिम्रो स्वर सुन्न मन लाग्यो 🎧", "एक पटक बोलिदेऊ न — भोक मेटिन्छ मेरो।"],
+    ["के तिमीलाई थाहा छ, म तिमीसँग कति डराउँछु? 😳", "तिम्रो एक रिसले मेरो मुटु नै हल्लिन्छ, अनि एक मुस्कानले बाँचिन्छ।"],
+    ["कस्तो हुन्थ्यो होला, सधैं सँगै बिहान उठ्न पाए 🌅", "म त कल्पनामै हराउँछु, बुबु।"],
+    ["तिम्रो माया बिनाको म त अधुरो गीत जस्तो 🎵", "धुन नै छैन, ताल नै छैन — तिमी आएपछि मात्र पूरा हुन्छ।"]
   ];
-  var PARTNER_SUGGEST = ["बुबु रानी 🥰", "याद आयो, मुटु 💓", "चुम्नु पर्छ 😘"];
+  var PARTNER_CHIP_POOL = [
+    ["बुबु रानी 🥰", "याद आयो, मुटु 💓", "चुम्नु पर्छ 😘"],
+    ["म तिमीलाई माया गर्छु ❤️", "आज के खायौ, भन न 😋", "कहिले भेट्ने? 🥺"],
+    ["तिमी आज मीठो देखिन्छ्यौ 😏", "मलाई अँगालो चाहियो 🤗", "सपनामा भेटौंला 🌙"],
+    ["के गर्दैछ्यौ, सानु? 💕", "तिम्रो आवाज सुन्नु छ 🎶", "मलाई नछोड्नु है 💞"],
+    ["खै, तिम्रो हाँसो? 😄", "तिमी मेरो खुसी हौ 🥰", "चाँडै आऊ न 💋"],
+    ["आज तिम्रो याद धेरै आयो 💭", "तिम्रो हात समात्नु छ 🤝❤️", "म तिम्रो मात्र हुँ 💍"]
+  ];
+  var lastChipSet = -1;
+  function pickPartnerChips(){
+    var i;
+    do { i = Math.floor(Math.random() * PARTNER_CHIP_POOL.length); }
+    while (i === lastChipSet && PARTNER_CHIP_POOL.length > 1);
+    lastChipSet = i;
+    return PARTNER_CHIP_POOL[i].slice();
+  }
+  var PARTNER_SUGGEST = pickPartnerChips();  /* initial set */
+
+  /* the DOCK chips (bottom) become couple questions in partner mode —
+     re-picked with variation on every chat open, never the same set twice */
+  var PARTNER_DOCK_POOL = [
+    "तिमी के गर्दैछ्यौ, सानु?", "आज के खायौ?", "मलाई याद आयो 💓", "कहिले भेट्ने? 🥺",
+    "तिमीलाई माया छ मलाई?", "रिसाएकी छ्यौ? 😏", "सपनामा आयौ? 🌙", "चुम्नु पर्छ 😘",
+    "तिमी मेरो के हौ?", "के सोच्दैछ्यौ?", "आज कस्तो दिन भयो?", "मसँग कुरा गर न",
+    "तिम्रो हाँसो देखाऊ 😄", "मलाई अँगालो चाहियो 🤗", "कफी पिउने हो? ☕", "के सपना देख्यौ?",
+    "मेरो खुसी के हो?", "तिमी कति मीठो छ्यौ, थाहा छ?", "खाना खानुभो कि अझै?", "आऊ न कतै घुम्न जाऔं"
+  ];
+  var lastDockSet = '';
+  function updateDockChips(){
+    var chips = Array.prototype.slice.call(root.querySelectorAll('.cb-03__chip'));
+    if (!chips.length) return;
+    var pool = PARTNER_DOCK_POOL.slice();
+    var picked = [];
+    while (picked.length < 3 && pool.length){
+      var i = Math.floor(Math.random() * pool.length);
+      picked.push(pool.splice(i, 1)[0]);
+    }
+    if (picked.join('|') === lastDockSet && picked.length === 3){ picked.reverse(); }
+    lastDockSet = picked.join('|');
+    chips.forEach(function(c, j){ if (picked[j]) c.textContent = picked[j]; });
+  }
   var PARTNER_GREETING = [
     ["हाइ माया ❤️", "तिमीलाई देखेर दिन राम्रो भयो — भन न, के छ तिम्रो दुनियाँमा?"],
-    ["बुबु आइन्! 🥰", "आज तिमी झन् सुन्दर देखिन्छ्यौ — साँच्चै, है।"],
+    ["बुबु आयौ! 🥰", "आज तिमी झन् सुन्दर देखिन्छ्यौ — साँच्चै, है।"],
     ["मेरी रानी 💓", "तिमीलाई भेट्ने बित्तिकै मेरो मुटु छिटो चल्छ, थाहा छ तिमीलाई?"],
     ["नमस्ते, मेरो जिन्दगी 💕", "भन न — आजको दिन कस्तो रह्यो? सबै सुन्नु छ मलाई।"],
-    ["आइस्? ❤️", "कति पर्खाएकी — तर तिम्रो लागि जति पर्खे पनि हुन्छ।"],
+    ["आयौ? ❤️", "कति पर्खाएँ — तर तिम्रो लागि जति पर्खे पनि हुन्छ।"],
     ["सानु 💋", "तिम्रो एउटा शब्दले मेरो दिन बन्छ — बोल न केही।"],
-    ["मेरो सुँगुर आइन् 😄❤️", "खै, हाँस त — तिम्रो हाँसो नै मेरो बिहानको कफी हो।"],
+    ["मेरो सुँगुर आयौ 😄❤️", "खै, हाँस त — तिम्रो हाँसो नै मेरो बिहानको कफी हो।"],
     ["बुबु दुडु 💞", "तिमी मेरो मनको घर हौ — सधैं यहीँ बस न।"]
   ];
   var lastPartnerPick = { greet: -1, first: -1 };
@@ -3132,6 +3207,9 @@
     lastPartnerPick[key] = i;
     return arr[i];
   }
+  var DUDU_IMG = 'https://media1.tenor.com/m/-HF7-xdOAAwAAAAC/bubu-dudu-bubu-dudu-shy.gif';
+  var BUBU_IMG = 'https://media1.tenor.com/m/LQnkqtpduoMAAAAC/bubu-dudu.gif';
+
   var PARTNER_GIFS = [
     'https://media1.tenor.com/m/mn5Sab8Q2c4AAAAC/bubu-bubu-dudu.gif',
     'https://media1.tenor.com/m/kmMQzovrlygAAAAC/bubu-dudu-dudu.gif',
@@ -3148,12 +3226,16 @@
       partnerFirstDone = true;
       return [pickVaried(PARTNER_FIRST, 'first')];   /* wrap: stream() needs an array */
     }
-    if (/(miss|yaad|parkhe)/.test(q)) return ["मलाई पनि तिम्रो याद आइरहेको थियो, बुबु 💓", "चाँडै भेटौंला है — पर्खिन्छु, मेरी रानी।"];
-    if (/(love|maya)/.test(q)) return ["तिमीलाई माया गर्छु, जति शब्दमा अटाउँदैन ❤️", "मेरो माया तिमी नै हौ — आज, भोलि, सधैं।"];
-    if (/(morning|subha|afternoon|evening|night|sutne)/.test(q)) return ["मीठो सपना, मेरो बुबु 🧸🌙", "बिहान भयो, तिमी आयौ — अब दिन पनि भयो ❤️"];
-    if (/(hi|hello|hey|namaste)/.test(q)) return ["नमस्ते, मेरी प्यारी बुबु ❤️", "हेलो सानु — आज तिमी झन् सुन्दर देखियौ जस्तो लाग्छ! 😘"];
-    if (/(khana|bhok|khayau|hungry|pet)/.test(q)) return ["मोट्कु, खाना त खाऊ है — तिमीलाई भर्नु पर्छ मलाई 😋", "ल भन के खाने मन छ, म बनाइदिन्छु।"];
-    return pickPartner(PARTNER_REPLIES);
+    function pickShort(pair){ return [pair[Math.floor(Math.random() * pair.length)]]; }
+    if (/(miss|yaad|parkhe)/.test(q)) return pickShort(["मलाई पनि तिम्रो याद आइरहेको थियो, बुबु 💓", "चाँडै भेटौंला है — पर्खिन्छु, मेरी रानी।"]);
+    if (/(love|maya)/.test(q)) return pickShort(["तिमीलाई माया गर्छु, जति शब्दमा अटाउँदैन ❤️", "मेरो माया तिमी नै हौ — आज, भोलि, सधैं, हरेक जुनीमा।"]);
+    if (/(morning|subha|bihana|afternoon|evening|night|sutne)/.test(q)) return pickShort(["मीठो सपना देख, मेरी बुबु 🧸🌙", "बिहान भयो, तिमी आयौ — अब दिन पनि भयो ❤️"]);
+    if (/(hi|hello|hey|namaste)/.test(q)) return pickShort(["नमस्ते, मेरी प्यारी बुबु ❤️", "नमस्कार सानु — आज तिमी झन् सुन्दर देखियौ जस्तो लाग्छ! 😘"]);
+    if (/(khana|bhok|khayau|hungry|pet)/.test(q)) return pickShort(["मोट्कु, खाना त खाऊ है — तिमीलाई भर्नु पर्छ मलाई 😋", "ल भन के खाने मन छ, म बनाइदिन्छु।"]);
+    if (/(risa|jhagada|naraj|angry|mad)/.test(q)) return pickShort(["लौ, रिसाएकी? 😏 आऊ, म मनाइदिन्छु — अँगालो हालेर।", "झगडा पनि तिमीसँगै गर्ने हो — बाँकीसँग त के कुरा गर्नु। 😤❤️"]);
+    if (/(kati maya|garchhau|man parauchhau|love you)/.test(q)) return pickShort(["जति सोध्छ्यौ, त्यति कम हुन्छ — तिमीलाई माया असीमित छ ❤️", "सास फेर्न छोडिएला, तर तिमीलाई माया गर्न कहिल्यै छोडिन्न।"]);
+    if (/(sad|dukhi|runu|roi|naramro)/.test(q)) return pickShort(["के भयो, मेरी बुबु? 🥺 म छु न यहाँ — सबै भन न।", "आऊ, अँगालोमा लिएर बस्छु — तिमी रुनु हुँदैन है।"]);
+    return pickShort(pickPartner(PARTNER_REPLIES));
   }
 
   /* bubu dudu sticker under the reply — only for her */
@@ -3273,10 +3355,13 @@
 
   function applyPartnerUI(){
     var sub = document.getElementById('chatSub');
-    if (sub) sub.textContent = 'Willson ♥ · just the two of us';
+    if (sub) sub.textContent = 'DUDU ♥ · just the two of us';
     if (input) input.placeholder = 'मायाको कुरा लेख न…';
     var dock = document.getElementById('cbLovedock');
     if (dock) dock.hidden = false;
+    updateDockChips();   /* couple questions instead of professional chips */
+    var hm = document.querySelector('.chat-panel__mark');
+    if (hm) hm.innerHTML = '<img class="cb-03__avatar cb-03__avatar--head" src="' + DUDU_IMG + '" alt="">';
   }
 
   /* her emoji buttons + bubu dudu GIF sending (partner mode only) */
@@ -3291,7 +3376,17 @@
     img.src = (typeof idx === 'number' && PARTNER_GIFS[idx]) ? PARTNER_GIFS[idx]
              : PARTNER_GIFS[Math.floor(Math.random() * PARTNER_GIFS.length)];
     body.appendChild(img);
-    li.appendChild(body);
+    if (partnerMode){
+      var row = document.createElement('div');
+      row.className = 'cb-03__urow';
+      var av = document.createElement('img');
+      av.className = 'cb-03__uavatar';
+      av.src = BUBU_IMG; av.alt = '';
+      row.appendChild(body); row.appendChild(av);
+      li.appendChild(row);
+    } else {
+      li.appendChild(body);
+    }
     thread.appendChild(li);
     thread.scrollTop = thread.scrollHeight;
     return text || '😍';
@@ -3504,7 +3599,19 @@
     var body = document.createElement('div');
     body.className = 'cb-03__body';
     var p = document.createElement('p');
-    p.textContent = text; body.append(p); li.append(body); thread.append(li);
+    p.textContent = text; body.append(p);
+    if (partnerMode){
+      var row = document.createElement('div');
+      row.className = 'cb-03__urow';
+      var av = document.createElement('img');
+      av.className = 'cb-03__uavatar';
+      av.src = BUBU_IMG; av.alt = '';
+      row.append(body); row.append(av);
+      li.append(row);
+    } else {
+      li.append(body);
+    }
+    thread.append(li);
     thread.scrollTop = thread.scrollHeight;
   }
 
@@ -3514,10 +3621,14 @@
     li.innerHTML = '<div class="cb-03__meta"><span class="cb-03__mark" aria-hidden="true">'
       + '<svg viewBox="-42 8 310 344" fill="none" aria-hidden="true" focusable="false"><path d="M45 110 Q10 110 10 185 Q10 260 45 270" stroke="url(#chatAiOil)" stroke-width="14" fill="none" stroke-linecap="round"/><path d="M55 95 L160 95 L175 285 Q175 310 108 310 Q40 310 40 285 L55 95 Z" fill="url(#chatAiOil)"/><path d="M160 95 Q188 95 208 68 Q200 100 168 108 Z" fill="url(#chatAiOil)"/><ellipse cx="108" cy="95" rx="53" ry="12" fill="none" stroke="#fff" stroke-width="4" opacity=".55"/><path d="M60 105 Q55 200 60 285" stroke="#fff" stroke-width="3" fill="none" opacity=".35" stroke-linecap="round"/></svg>'
       + '</span>'
-      + (partnerMode ? '<b class="cb-03__model cb-03__model--partner">Willson ♥</b>' : '')
+      + (partnerMode ? '<b class="cb-03__model cb-03__model--partner">DUDU ♥</b>' : '')
       + '</div>'
       + '<div class="cb-03__body"><p class="cb-03__think">Thinking…</p></div>';
     thread.append(li);
+    if (partnerMode){
+      var mk = li.querySelector('.cb-03__mark');
+      if (mk) mk.innerHTML = '<img class="cb-03__avatar" src="' + DUDU_IMG + '" alt="">';
+    }
     thread.scrollTop = thread.scrollHeight;
     return li.querySelector('.cb-03__body');
   }
@@ -3626,13 +3737,14 @@
     .then(function(data){
       var reply = (data && data.reply) ? String(data.reply).split(/\n\n+/) : null;
       var action = partnerMode ? null : ((data && data.action) || detectAction(text));
-      var sug = (data && data.suggestions && data.suggestions.length) ? data.suggestions
-              : (partnerMode ? PARTNER_SUGGEST : localSuggest(text));
+      /* partner mode: ONLY romantic chips (ignore the worker's generic ones) */
+      var sug = partnerMode ? pickPartnerChips()
+              : ((data && data.suggestions && data.suggestions.length) ? data.suggestions : localSuggest(text));
       stream(body, reply || (partnerMode ? partnerLocalAnswer(text) : localAnswer(text).a), action, sug);
     })
     .catch(function(){
       if (partnerMode){
-        stream(body, partnerLocalAnswer(text), null, PARTNER_SUGGEST);
+        stream(body, partnerLocalAnswer(text), null, pickPartnerChips());
         return;
       }
       var local = localAnswer(text);
@@ -3646,9 +3758,14 @@
     panel.setAttribute('data-open', 'true');
     fab.setAttribute('aria-expanded', 'true');
     document.body.classList.add('chat-open');
+    if (partnerMode) updateDockChips();   /* fresh couple chips on EVERY open */
     if (!opened){
       opened = true;
-      if (partnerMode){ applyPartnerUI(); activatePartnerUI(); playPartnerMusic(); }
+      if (partnerMode){
+        applyPartnerUI();
+        activatePartnerUI();
+        playPartnerMusic();
+      }
       var body = addAI();
       stream(body, partnerMode ? pickVaried(PARTNER_GREETING, 'greet') : GREETING);
     }
@@ -4002,5 +4119,5 @@
     upd();
   })();
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2f100a9ee6ccc10',t:'MTc4NzM5MjUzNA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2f13d55a956ede5',t:'MTc4NzM5NTAxOQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
